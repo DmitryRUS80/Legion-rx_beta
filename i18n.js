@@ -24,6 +24,8 @@ const en = {
   'Квалификация — стартовые позиции':'Qualifying — starting positions','Финал A — стартовые позиции':'Final A — starting positions','ГЛАВНЫЙ ФИНАЛ':'MAIN FINAL','КВАЛИФИКАЦИЯ':'QUALIFYING','прямой проход':'direct advancement','зачёт двух лучших результатов':'best two results count','↑ 2 МЕСТА':'↑ 2 POSITIONS',
   'Руководство пользователя':'User guide','1. Создание соревнования':'1. Creating a race','2. Участники':'2. Drivers','3. Квалификация':'3. Qualifying','4. Финальная стадия':'4. Finals stage','5. Ввод результатов':'5. Entering results','6. Экспорт':'6. Export','Спортивный регламент Legion RX Championship':'Legion RX Championship sporting regulations','2. Что такое LCQ':'2. What is LCQ','3. Финальная система':'3. Finals system','4. Как формируется решётка Финала A':'4. How the Final A grid is formed',
   'Закрыть':'Close','На главную':'Home','Навигация':'Navigation','Предпросмотр фото':'Photo preview','Фото':'Photo','Фото пилота':'Driver photo','English':'English'
+  ,'ФОТО ПИЛОТА':'DRIVER PHOTO','Выберите область фотографии':'Choose the photo area','Перемещайте фотографию пальцем или мышью. Используйте два пальца или ползунок для масштаба.':'Move the photo with your finger or mouse. Use two fingers or the slider to zoom.','Масштаб':'Zoom','Размер рамки':'Crop frame size','↻ Повернуть':'↻ Rotate','Повернуть':'Rotate','Сбросить':'Reset','Оптимизировано для Legion RX':'Optimized for Legion RX','Готово':'Done','Фотография для кадрирования':'Photo to crop','Не удалось открыть фотографию.':'Could not open the photo.'
+
 };
 
 const rules = [

@@ -1,4 +1,4 @@
-/* Legion RX Championship Edition v3.0 */
+/* Legion RX Championship Edition v3.3.2 Beta */
 
 const $ = id => document.getElementById(id);
 const eventNameInput = $("eventName");
@@ -169,37 +169,210 @@ function updatePhotoPreview() {
     $("clearPilotPhoto").classList.toggle("hidden", !pendingPilotPhoto);
 }
 
-async function processPilotPhoto(file) {
-    if (!file || !file.type.startsWith("image/")) return;
-    const source = await new Promise((resolve, reject) => {
+let cropEditorState = null;
+
+function readImageFile(file) {
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result);
         reader.onerror = reject;
         reader.readAsDataURL(file);
     });
-    const image = await new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = reject;
-        img.src = source;
+}
+
+function loadCropImage(source) {
+    return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve(image);
+        image.onerror = reject;
+        image.src = source;
     });
-    const size = Math.min(image.naturalWidth, image.naturalHeight);
-    const sx = (image.naturalWidth - size) / 2;
-    const sy = (image.naturalHeight - size) / 2;
+}
+
+function openPhotoCropper(file, target = "new") {
+    if (!file || !file.type.startsWith("image/")) return;
+    readImageFile(file).then(loadCropImage).then(image => {
+        const stage = $("photoCropStage");
+        const frame = $("photoCropFrame");
+        const cropImage = $("photoCropImage");
+        const stageSize = Math.min(stage.clientWidth || 340, 420);
+        const frameSize = Math.min(260, stageSize - 36);
+        const coverScale = Math.max(frameSize / image.naturalWidth, frameSize / image.naturalHeight);
+        cropEditorState = {
+            target,
+            image,
+            x: stageSize / 2,
+            y: stageSize / 2,
+            scale: coverScale,
+            minScale: coverScale * .55,
+            maxScale: coverScale * 5,
+            rotation: 0,
+            frameSize,
+            stageSize,
+            dragging: false,
+            lastX: 0,
+            lastY: 0,
+            pinchDistance: 0,
+            pinchScale: coverScale
+        };
+        cropImage.src = image.src;
+        $("photoCropZoom").value = "100";
+        $("photoCropSize").value = String(frameSize);
+        frame.style.width = frameSize + "px";
+        frame.style.height = frameSize + "px";
+        $("photoCropModal").classList.remove("hidden");
+        document.body.classList.add("cropEditorOpen");
+        requestAnimationFrame(renderPhotoCropper);
+    }).catch(() => alert("Не удалось открыть фотографию."));
+}
+
+function closePhotoCropper() {
+    $("photoCropModal").classList.add("hidden");
+    document.body.classList.remove("cropEditorOpen");
+    $("photoCropImage").removeAttribute("src");
+    cropEditorState = null;
+}
+
+function renderPhotoCropper() {
+    if (!cropEditorState) return;
+    const state = cropEditorState;
+    $("photoCropImage").style.transform = `translate(-50%, -50%) translate(${state.x - state.stageSize/2}px, ${state.y - state.stageSize/2}px) rotate(${state.rotation}deg) scale(${state.scale})`;
+    $("photoCropFrame").style.width = state.frameSize + "px";
+    $("photoCropFrame").style.height = state.frameSize + "px";
+}
+
+function setCropZoom(percent) {
+    if (!cropEditorState) return;
+    const state = cropEditorState;
+    const ratio = Math.max(0, Math.min(1, (Number(percent) - 50) / 250));
+    state.scale = state.minScale + ratio * (state.maxScale - state.minScale);
+    renderPhotoCropper();
+}
+
+function cropPointerPosition(event) {
+    const rect = $("photoCropStage").getBoundingClientRect();
+    return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+}
+
+function cropTouchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
+}
+
+function exportCroppedPhoto() {
+    if (!cropEditorState) return;
+    const state = cropEditorState;
     const canvas = document.createElement("canvas");
     canvas.width = 400;
     canvas.height = 400;
     const ctx = canvas.getContext("2d");
-    ctx.drawImage(image, sx, sy, size, size, 0, 0, 400, 400);
-    pendingPilotPhoto = canvas.toDataURL("image/jpeg", .82);
-    updatePhotoPreview();
+    const frameLeft = (state.stageSize - state.frameSize) / 2;
+    const frameTop = (state.stageSize - state.frameSize) / 2;
+    const outputScale = 400 / state.frameSize;
+    ctx.save();
+    ctx.scale(outputScale, outputScale);
+    ctx.translate(state.x - frameLeft, state.y - frameTop);
+    ctx.rotate(state.rotation * Math.PI / 180);
+    ctx.scale(state.scale, state.scale);
+    ctx.drawImage(state.image, -state.image.naturalWidth / 2, -state.image.naturalHeight / 2);
+    ctx.restore();
+    const result = canvas.toDataURL("image/jpeg", .84);
+    if (state.target === "edit") {
+        pendingEditPilotPhoto = result;
+        updateEditPhotoPreview();
+    } else {
+        pendingPilotPhoto = result;
+        updatePhotoPreview();
+    }
+    closePhotoCropper();
 }
 
+function processPilotPhoto(file) { openPhotoCropper(file, "new"); }
 $("takePilotPhoto").addEventListener("click", () => $("pilotCameraInput").click());
 $("uploadPilotPhoto").addEventListener("click", () => $("pilotGalleryInput").click());
 $("pilotCameraInput").addEventListener("change", e => { processPilotPhoto(e.target.files[0]); e.target.value = ""; });
 $("pilotGalleryInput").addEventListener("change", e => { processPilotPhoto(e.target.files[0]); e.target.value = ""; });
 $("clearPilotPhoto").addEventListener("click", () => { pendingPilotPhoto = ""; updatePhotoPreview(); });
+
+const photoCropStage = $("photoCropStage");
+photoCropStage.addEventListener("pointerdown", event => {
+    if (!cropEditorState || event.pointerType === "touch") return;
+    const point = cropPointerPosition(event);
+    cropEditorState.dragging = true;
+    cropEditorState.lastX = point.x;
+    cropEditorState.lastY = point.y;
+    photoCropStage.setPointerCapture(event.pointerId);
+});
+photoCropStage.addEventListener("pointermove", event => {
+    if (!cropEditorState?.dragging || event.pointerType === "touch") return;
+    const point = cropPointerPosition(event);
+    cropEditorState.x += point.x - cropEditorState.lastX;
+    cropEditorState.y += point.y - cropEditorState.lastY;
+    cropEditorState.lastX = point.x;
+    cropEditorState.lastY = point.y;
+    renderPhotoCropper();
+});
+photoCropStage.addEventListener("pointerup", () => { if (cropEditorState) cropEditorState.dragging = false; });
+photoCropStage.addEventListener("pointercancel", () => { if (cropEditorState) cropEditorState.dragging = false; });
+photoCropStage.addEventListener("touchstart", event => {
+    if (!cropEditorState) return;
+    event.preventDefault();
+    if (event.touches.length === 1) {
+        const rect = photoCropStage.getBoundingClientRect();
+        cropEditorState.dragging = true;
+        cropEditorState.lastX = event.touches[0].clientX - rect.left;
+        cropEditorState.lastY = event.touches[0].clientY - rect.top;
+    } else if (event.touches.length === 2) {
+        cropEditorState.pinchDistance = cropTouchDistance(event.touches);
+        cropEditorState.pinchScale = cropEditorState.scale;
+    }
+}, { passive:false });
+photoCropStage.addEventListener("touchmove", event => {
+    if (!cropEditorState) return;
+    event.preventDefault();
+    if (event.touches.length === 1 && cropEditorState.dragging) {
+        const rect = photoCropStage.getBoundingClientRect();
+        const x = event.touches[0].clientX - rect.left;
+        const y = event.touches[0].clientY - rect.top;
+        cropEditorState.x += x - cropEditorState.lastX;
+        cropEditorState.y += y - cropEditorState.lastY;
+        cropEditorState.lastX = x;
+        cropEditorState.lastY = y;
+    } else if (event.touches.length === 2 && cropEditorState.pinchDistance) {
+        const ratio = cropTouchDistance(event.touches) / cropEditorState.pinchDistance;
+        cropEditorState.scale = Math.max(cropEditorState.minScale, Math.min(cropEditorState.maxScale, cropEditorState.pinchScale * ratio));
+        const normalized = (cropEditorState.scale - cropEditorState.minScale) / (cropEditorState.maxScale - cropEditorState.minScale);
+        $("photoCropZoom").value = String(Math.round(50 + normalized * 250));
+    }
+    renderPhotoCropper();
+}, { passive:false });
+photoCropStage.addEventListener("touchend", () => { if (cropEditorState) { cropEditorState.dragging = false; cropEditorState.pinchDistance = 0; } }, { passive:false });
+$("photoCropZoom").addEventListener("input", event => setCropZoom(event.target.value));
+$("photoCropSize").addEventListener("input", event => {
+    if (!cropEditorState) return;
+    cropEditorState.frameSize = Number(event.target.value);
+    renderPhotoCropper();
+});
+$("photoCropRotate").addEventListener("click", () => {
+    if (!cropEditorState) return;
+    cropEditorState.rotation = (cropEditorState.rotation + 90) % 360;
+    renderPhotoCropper();
+});
+$("photoCropReset").addEventListener("click", () => {
+    if (!cropEditorState) return;
+    const state = cropEditorState;
+    const coverScale = Math.max(state.frameSize / state.image.naturalWidth, state.frameSize / state.image.naturalHeight);
+    state.x = state.stageSize / 2; state.y = state.stageSize / 2; state.scale = coverScale; state.rotation = 0;
+    state.minScale = coverScale * .55; state.maxScale = coverScale * 5;
+    $("photoCropZoom").value = "100";
+    renderPhotoCropper();
+});
+$("photoCropCancel").addEventListener("click", closePhotoCropper);
+$("photoCropClose").addEventListener("click", closePhotoCropper);
+$("photoCropDone").addEventListener("click", exportCroppedPhoto);
+$("photoCropModal").addEventListener("click", event => { if (event.target === $("photoCropModal")) closePhotoCropper(); });
+
 
 function drawPilotDatabase() {
     const host = $("pilotDatabaseList");
@@ -251,16 +424,7 @@ function closePilotEdit() {
     pendingEditPilotPhoto = "";
 }
 
-async function processEditPilotPhoto(file) {
-    if (!file || !file.type.startsWith("image/")) return;
-    const source = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
-    const image = await new Promise((resolve, reject) => { const img = new Image(); img.onload = () => resolve(img); img.onerror = reject; img.src = source; });
-    const size = Math.min(image.naturalWidth, image.naturalHeight);
-    const canvas = document.createElement("canvas"); canvas.width = 400; canvas.height = 400;
-    canvas.getContext("2d").drawImage(image, (image.naturalWidth-size)/2, (image.naturalHeight-size)/2, size, size, 0, 0, 400, 400);
-    pendingEditPilotPhoto = canvas.toDataURL("image/jpeg", .82);
-    updateEditPhotoPreview();
-}
+function processEditPilotPhoto(file) { openPhotoCropper(file, "edit"); }
 
 $("closePilotEdit").addEventListener("click", closePilotEdit);
 $("pilotEditModal").addEventListener("click", e => { if (e.target === $("pilotEditModal")) closePilotEdit(); });

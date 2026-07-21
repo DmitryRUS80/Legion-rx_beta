@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-title" content="Legion RX">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-    <title>Legion RX Championship Edition v3.3.1 Beta</title>
+    <title>Legion RX Championship Edition v3.3.2 Beta</title>
     <link rel="stylesheet" href="style.css?v=3.1.1">
 </head>
 <body>
@@ -20,7 +20,7 @@
             <div class="brandMark"><span>LEGION</span><b>RX</b></div>
             <small>RallyCross Manager</small>
         </div>
-        <div class="versionBadge">v3.3.1 BETA</div>
+        <div class="versionBadge">v3.3.2 BETA</div>
     </header>
 
     <div id="installHelp" class="installHelp hidden"></div>
@@ -287,6 +287,32 @@
         </section>
     </main>
 
+
+    <div id="photoCropModal" class="modalBackdrop cropModal hidden" role="dialog" aria-modal="true" aria-labelledby="photoCropTitle">
+        <div class="modalPanel cropModalPanel">
+            <div class="modalHeader">
+                <div><span>ФОТО ПИЛОТА</span><h2 id="photoCropTitle">Выберите область фотографии</h2></div>
+                <button id="photoCropClose" class="iconButton" type="button" aria-label="Закрыть">×</button>
+            </div>
+            <p class="cropHelp">Перемещайте фотографию пальцем или мышью. Используйте два пальца или ползунок для масштаба.</p>
+            <div id="photoCropStage" class="photoCropStage">
+                <img id="photoCropImage" class="photoCropImage" alt="Фотография для кадрирования" draggable="false">
+                <div class="photoCropShade" aria-hidden="true"></div>
+                <div id="photoCropFrame" class="photoCropFrame" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="cropControls">
+                <label for="photoCropZoom"><span>Масштаб</span><input id="photoCropZoom" type="range" min="50" max="300" value="100"></label>
+                <label for="photoCropSize"><span>Размер рамки</span><input id="photoCropSize" type="range" min="170" max="300" value="260"></label>
+            </div>
+            <div class="cropToolRow">
+                <button id="photoCropRotate" class="secondaryButton" type="button">↻ Повернуть</button>
+                <button id="photoCropReset" class="secondaryButton" type="button">Сбросить</button>
+            </div>
+            <div class="cropOutputNote"><b>400 × 400 px</b><span>Оптимизировано для Legion RX</span></div>
+            <div class="cropFooterActions"><button id="photoCropCancel" class="ghostAction" type="button">Отмена</button><button id="photoCropDone" type="button">Готово</button></div>
+        </div>
+    </div>
+
     <nav class="bottomNav" aria-label="Навигация">
         <div id="appNav" class="navGroup">
             <button class="navItem active" data-route="home"><span>⌂</span><small>Главная</small></button>
@@ -306,13 +332,13 @@
 
 <footer>Legion RC Penza · RallyCross Manager</footer>
 
-<script src="i18n.js?v=3.3.1"></script>
-<script src="data.js?v=3.3.1"></script>
-<script src="score.js?v=3.3.1"></script>
-<script src="qualifying.js?v=3.3.1"></script>
-<script src="finals.js?v=3.3.1"></script>
-<script src="championship.js?v=3.3.1"></script>
-<script src="app.js?v=3.3.1"></script>
-<script src="pwa.js?v=3.3.1"></script>
+<script src="i18n.js?v=3.3.2"></script>
+<script src="data.js?v=3.3.2"></script>
+<script src="score.js?v=3.3.2"></script>
+<script src="qualifying.js?v=3.3.2"></script>
+<script src="finals.js?v=3.3.2"></script>
+<script src="championship.js?v=3.3.2"></script>
+<script src="app.js?v=3.3.2"></script>
+<script src="pwa.js?v=3.3.2"></script>
 </body>
 </html>
