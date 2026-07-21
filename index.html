@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#090b0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Legion RX">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <title>Legion RX Championship Edition v3.2.1 Beta</title>
+    <link rel="stylesheet" href="style.css?v=3.1.1">
+</head>
+<body>
+<div class="appShell">
+    <header class="topBar">
+        <button class="homeButton" id="openHome" aria-label="На главную"><span>⌂</span><small>Главная</small></button>
+        <div class="brandBlock">
+            <div class="brandMark"><span>LEGION</span><b>RX</b></div>
+            <small>RallyCross Manager</small>
+        </div>
+        <div class="versionBadge">v3.1.1 BETA</div>
+    </header>
+
+    <div id="installHelp" class="installHelp hidden"></div>
+
+    <main class="appMain">
+        <section id="homeView" class="appScreen">
+            <div class="heroShowcase">
+                <img src="assets/legion-rx-hero.jpg" alt="Legion RX — менеджер соревнований RallyCross">
+                <div class="heroShowcaseActions">
+                    <button class="primaryAction" id="homeNewRace">Новая гонка</button>
+                    <button class="secondaryButton" data-route="championships">Чемпионаты</button>
+                    <button class="secondaryButton" data-route="archive">Архив соревнований</button>
+                </div>
+            </div>
+
+            <div id="currentRaceCard" class="currentRaceCard hidden"></div>
+
+            <div class="sectionHeading">
+                <div>
+                    <span>УПРАВЛЕНИЕ</span>
+                    <h2>Главное меню</h2>
+                </div>
+            </div>
+
+            <div class="menuGrid">
+                <button class="menuCard championshipMenuCard" data-route="championships"><span class="menuIcon">🏆</span><span><b>Чемпионаты</b><small>Сезоны, этапы и общий зачёт</small></span><i>›</i></button>
+                <button class="menuCard activeCard" data-route="race" data-scroll="createSection">
+                    <span class="menuIcon">⚑</span><span><b>Соревнование</b><small>Настройки этапа и пилоты</small></span><i>›</i>
+                </button>
+                <button class="menuCard" data-route="race" data-scroll="qualifyingBlock">
+                    <span class="menuIcon">⌁</span><span><b>Квалификация</b><small>Заезды, очки и Best 3</small></span><i>›</i>
+                </button>
+                <button class="menuCard" data-route="race" data-scroll="finalsSection">
+                    <span class="menuIcon">♛</span><span><b>Финалы</b><small>Стартовые сетки и переходы</small></span><i>›</i>
+                </button>
+                <button class="menuCard" data-route="race" data-scroll="protocolSection">
+                    <span class="menuIcon">▥</span><span><b>Результаты</b><small>Протокол, PDF и PNG</small></span><i>›</i>
+                </button>
+                <button class="menuCard" data-route="pilots">
+                    <span class="menuIcon">👤</span><span><b>Пилоты</b><small>Постоянная база участников</small></span><i>›</i>
+                </button>
+                <button class="menuCard" data-route="archive">
+                    <span class="menuIcon">▣</span><span><b>Архив</b><small>История соревнований</small></span><i>›</i>
+                </button>
+                <button class="menuCard" data-route="settings">
+                    <span class="menuIcon">⚙</span><span><b>Настройки</b><small>Экспорт и управление данными</small></span><i>›</i>
+                </button>
+            </div>
+        </section>
+
+        <div id="raceView" class="appScreen hidden">
+            <div class="screenHero">
+                <div><span>LEGION RX</span><h1>Соревнование</h1></div>
+                <button class="ghostAction" data-route="home">← Меню</button>
+            </div>
+
+            <section id="createSection" class="card featureCard">
+                <div class="cardLabel">01 · НАСТРОЙКА ЭТАПА</div>
+                <h2>Создать соревнование</h2>
+
+                <label for="eventName">Название соревнования</label>
+                <input id="eventName" type="text" placeholder="Legion CUP RX — этап 1">
+
+                <div class="formGrid">
+                    <div>
+                        <label for="clubName">Клуб-организатор</label>
+                        <input id="clubName" type="text" placeholder="Legion RC Penza">
+                    </div>
+                    <div>
+                        <label for="eventDate">Дата</label>
+                        <input id="eventDate" type="date">
+                    </div>
+                    <div>
+                        <label for="eventLocation">Место проведения</label>
+                        <input id="eventLocation" type="text" placeholder="Пенза, зал / трасса">
+                    </div>
+                    <div>
+                        <label for="eventStatus">Тип соревнования</label>
+                        <select id="eventStatus">
+                            <option value="championship">Этап чемпионата</option>
+                            <option value="club" selected>Клубная гонка</option>
+                            <option value="training">Тренировочное</option>
+                            <option value="test">Тестовое</option>
+                        </select>
+                    </div>
+                    <div id="championshipLinkFields" class="hidden">
+                        <label for="raceChampionshipId">Чемпионат</label>
+                        <select id="raceChampionshipId"></select>
+                    </div>
+                    <div id="championshipStageFields" class="hidden">
+                        <label for="raceStageNumber">Номер этапа</label>
+                        <input id="raceStageNumber" type="number" min="1" value="1">
+                    </div>
+                    <div>
+                        <label for="qualifyingCount">Количество квалификаций</label>
+                        <select id="qualifyingCount">
+                            <option value="3">3</option>
+                            <option value="4" selected>4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <label class="checkboxLabel">
+                        <input id="publishAllowed" type="checkbox">
+                        <span>Разрешить публикацию результата</span>
+                    </label>
+                </div>
+
+                <button id="createRace">Создать соревнование</button>
+            </section>
+
+            <section id="pilotsSection" class="card">
+                <div class="cardLabel">02 · СОСТАВ</div>
+                <div class="titleWithCounter"><h2>Регистрация пилотов</h2><span id="pilotCounter">0</span></div>
+                <div class="pilotRegistrationPanel">
+                    <div class="pilotPhotoEditor">
+                        <div id="racePilotPhotoPreview" class="pilotPhotoPlaceholder"><span>👤</span></div>
+                        <div class="pilotPhotoActions">
+                            <button id="takePilotPhoto" type="button" class="secondaryButton">📷 Сфотографировать</button>
+                            <button id="uploadPilotPhoto" type="button" class="secondaryButton">🖼 Загрузить фото</button>
+                            <button id="clearPilotPhoto" type="button" class="ghostAction hidden">Убрать фото</button>
+                        </div>
+                        <input id="pilotCameraInput" class="hidden" type="file" accept="image/*" capture="user">
+                        <input id="pilotGalleryInput" class="hidden" type="file" accept="image/*">
+                    </div>
+                    <div class="pilotAdd">
+                        <input id="pilotName" type="text" placeholder="Фамилия Имя">
+                        <button id="addPilot">Создать и добавить</button>
+                    </div>
+                    <div class="pilotDatabaseActions">
+                        <button id="openPilotDatabase" type="button" class="secondaryButton">Добавить из базы</button>
+                        <span>Пилот останется в базе для следующих гонок.</span>
+                    </div>
+                </div>
+                <div id="racePilotList" class="racePilotList"></div>
+                <button id="nextStep" disabled>Перейти к квалификациям</button>
+            </section>
+
+            <section id="qualifyingBlock" class="card hidden">
+                <div class="cardLabel">03 · BEST 3</div>
+                <div class="sectionTitleRow"><div><h2>Квалификации</h2><p class="sectionHint">Победы выделены красным. В зачёт автоматически входят три лучших результата.</p></div><span class="rxTag">FIA POINTS</span></div>
+                <div id="qualifyingContent"></div>
+                <div class="standingsPanel">
+                    <div class="standingsHeader"><div><span>LIVE RANKING</span><h2>Общий рейтинг</h2></div><b>BEST 3</b></div>
+                    <div id="standings">Пока нет результатов.</div>
+                </div>
+            </section>
+
+            <section id="finalsSection" class="card hidden">
+                <div class="cardLabel">04 · РЕШАЮЩИЕ ЗАЕЗДЫ</div>
+                <h2>Финалы</h2>
+                <p class="sectionHint">Финалы формируют стартовую сетку главного заезда и итоговый протокол.</p>
+                <div id="finalsExplanation"></div>
+                <div id="finalsBlock"></div>
+                <div class="standingsPanel finalsStandingsPanel">
+                    <div class="standingsHeader"><div><span>LIVE RANKING</span><h2>Турнирная таблица Финала A</h2></div><b>BEST 2 OF 3</b></div>
+                    <div id="finalsStandings">Состав Финала A появится после завершения отбора.</div>
+                </div>
+            </section>
+
+            <section id="protocolSection" class="card protocolCard hidden">
+                <div class="protocolBrand"><span>LEGION</span><b>RX</b></div>
+                <div class="sectionTitleRow">
+                    <div><div class="cardLabel">05 · ОФИЦИАЛЬНЫЙ ДОКУМЕНТ</div><h2>Итоговый протокол</h2></div>
+                    <div class="protocolActions">
+                        <button id="printProtocol" class="secondaryButton">PDF / Печать</button>
+                        <button id="saveProtocolImage" class="secondaryButton">Скачать PNG</button>
+                        <button id="completeRace" class="primaryAction">🏁 Завершить соревнование</button>
+                    </div>
+                </div>
+                <div id="protocolBlock"></div>
+            </section>
+        </div>
+
+
+        <section id="championshipsView" class="appScreen hidden">
+            <div class="screenHero"><div><span>CHAMPIONSHIP EDITION</span><h1>Чемпионаты</h1></div><button class="ghostAction" data-route="home">← Меню</button></div>
+            <section class="card featureCard">
+                <div class="cardLabel">НОВЫЙ СЕЗОН</div><h2>Создать чемпионат</h2>
+                <div class="formGrid">
+                    <div><label for="champName">Название</label><input id="champName" placeholder="Legion RX Cup"></div>
+                    <div><label for="champSeason">Сезон</label><input id="champSeason" type="number" min="2020" max="2100"></div>
+                    <div><label for="champStagesPlanned">План этапов</label><input id="champStagesPlanned" type="number" min="1" max="30" value="6"></div>
+                </div>
+                <button id="createChampionship">Создать чемпионат</button>
+            </section>
+            <section class="card"><div class="sectionTitleRow"><div><div class="cardLabel">СЕЗОНЫ</div><h2>Мои чемпионаты</h2></div></div><div id="championshipList"></div></section>
+            <section id="championshipDetail" class="card hidden"></section>
+        </section>
+
+        <section id="pilotsView" class="appScreen hidden">
+            <div class="screenHero compactHero"><div><span>LEGION RX</span><h1>База пилотов</h1></div><button class="ghostAction" data-route="home">← Меню</button></div>
+            <section class="card featureCard">
+                <div class="cardLabel">ПОСТОЯННЫЕ ПРОФИЛИ</div>
+                <div class="sectionTitleRow"><div><h2>Пилоты</h2><p class="sectionHint">Удаление здесь удаляет профиль из базы, но не меняет архивные результаты.</p></div><button id="newDatabasePilot" class="primaryAction">＋ Новый пилот</button></div>
+                <div id="pilotDatabaseList" class="racePilotList"></div>
+            </section>
+        </section>
+
+        <div id="pilotDatabaseModal" class="modalBackdrop hidden" role="dialog" aria-modal="true" aria-labelledby="pilotDatabaseTitle">
+            <div class="modalPanel">
+                <div class="modalHeader"><div><span>БАЗА ПИЛОТОВ</span><h2 id="pilotDatabaseTitle">Добавить в гонку</h2></div><button id="closePilotDatabase" class="iconButton" aria-label="Закрыть">×</button></div>
+                <input id="pilotDatabaseSearch" type="search" placeholder="Поиск пилота">
+                <div id="pilotDatabasePickerList" class="pilotPickerList"></div>
+            </div>
+        </div>
+
+        <section id="archiveView" class="appScreen card hidden">
+            <div class="screenHero compactHero"><div><span>ИСТОРИЯ</span><h1>Архив</h1></div><button class="ghostAction" data-route="home">← Меню</button></div>
+            <div class="sectionTitleRow">
+                <div><div class="cardLabel">СОХРАНЁННЫЕ ЭТАПЫ</div><h2>Соревнования</h2></div>
+                <select id="archiveFilter" class="compactSelect">
+                    <option value="all">Все</option>
+                    <option value="official">Официальные</option>
+                    <option value="club">Клубные</option>
+                    <option value="training">Тренировочные</option>
+                    <option value="test">Тестовые</option>
+                </select>
+            </div>
+            <div id="archiveList"></div>
+        </section>
+
+
+        <section id="helpView" class="appScreen card hidden">
+          <div class="screenHero compactHero"><div><span>СПРАВКА</span><h1>Руководства и правила</h1></div><button class="ghostAction" data-route="home">← Меню</button></div>
+          <div class="helpTabs"><button class="helpTab active" data-help="manual">Руководство</button><button class="helpTab" data-help="raceguide">Правила гонки</button><button class="helpTab" data-help="terms">Обозначения</button></div>
+          <div id="helpContent"></div>
+        </section>
+
+        <section id="settingsView" class="appScreen card hidden">
+            <div class="screenHero compactHero"><div><span>СИСТЕМА</span><h1>Настройки</h1></div><button class="ghostAction" data-route="home">← Меню</button></div>
+            <div class="settingsGrid">
+                <article class="settingsCard"><span>↧</span><div><h3>Экспорт гонки</h3><p>Сохранить полную резервную копию в JSON.</p></div><button id="exportRace">Скачать</button></article>
+                <article class="settingsCard dangerSettings"><span>×</span><div><h3>Отменить текущую гонку</h3><p>Удалить незавершённую гонку. Архив не пострадает.</p></div><button id="clearRace">Отменить</button></article>
+                <article class="settingsCard"><span>▣</span><div><h3>PWA-приложение</h3><p>Устанавливается на экран iPhone и работает офлайн.</p></div><button id="showInstallInfo">Инструкция</button></article>
+                <article class="settingsCard"><span>?</span><div><h3>Руководства и правила</h3><p>Работа с приложением, формат гонки и обозначения.</p></div><button data-route="help">Открыть</button></article>
+            </div>
+            <div id="rulesPanel" class="rulesPanel hidden"></div>
+        </section>
+    </main>
+
+    <nav class="bottomNav" aria-label="Навигация">
+        <div id="appNav" class="navGroup">
+            <button class="navItem active" data-route="home"><span>⌂</span><small>Главная</small></button>
+            <button class="navItem" data-route="championships"><span>🏆</span><small>Чемпионаты</small></button>
+            <button class="navItem" data-route="pilots"><span>👤</span><small>Пилоты</small></button>
+            <button class="navItem" data-route="archive"><span>▤</span><small>Архив</small></button>
+            <button class="navItem" data-route="settings"><span>⚙</span><small>Настройки</small></button>
+        </div>
+        <div id="raceNav" class="navGroup hidden">
+            <button class="navItem active" data-route="race" data-scroll="createSection"><span>♟</span><small>Участники</small></button>
+            <button class="navItem" data-route="race" data-scroll="qualifyingBlock"><span>⌁</span><small>Квалификация</small></button>
+            <button class="navItem" data-route="race" data-scroll="finalsSection"><span>♛</span><small>Финалы</small></button>
+            <button class="navItem" data-route="race" data-scroll="protocolSection"><span>▥</span><small>Итог</small></button>
+        </div>
+    </nav>
+</div>
+
+<footer>Legion RC Penza · RallyCross Manager</footer>
+
+<script src="data.js?v=3.1.1"></script>
+<script src="score.js?v=3.1.1"></script>
+<script src="qualifying.js?v=3.1.1"></script>
+<script src="finals.js?v=3.1.1"></script>
+<script src="championship.js?v=3.1.1"></script>
+<script src="app.js?v=3.1.1"></script>
+<script src="pwa.js?v=3.1.1"></script>
+</body>
+</html>
