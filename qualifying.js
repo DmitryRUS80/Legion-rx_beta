@@ -156,7 +156,7 @@ function renderQualifying() {
                     <div class="qualifyingPilotIdentity">
                         <div class="qualifyingPilotNumber">${pilotIndex + 1}</div>
                         <div class="pilotRowPhoto qualifyingPilotPhoto">${pilotPhotoMarkup(pilot.photo, pilot.name)}</div>
-                        <div class="pilotRowInfo qualifyingPilotInfo"><b>${escapeHtml(pilot.name)}</b><small>LEGION <em>RX</em></small></div>
+                        <div class="pilotRowInfo qualifyingPilotInfo"><b>${escapeHtml(pilot.name)}</b>${pilotClubMarkup(pilot.club)}</div>
                     </div>
                     <div class="qualifyingResultSide">
                         <label class="qualifyingResultLabel" for="q${round}h${heatData.heat}p${pilot.id}">Место</label>

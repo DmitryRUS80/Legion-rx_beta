@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-title" content="Legion RX">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-    <title>Legion RX Championship Edition v3.2.1 Beta</title>
+    <title>Legion RX Championship Edition v3.3 Beta</title>
     <link rel="stylesheet" href="style.css?v=3.1.1">
 </head>
 <body>
@@ -20,7 +20,7 @@
             <div class="brandMark"><span>LEGION</span><b>RX</b></div>
             <small>RallyCross Manager</small>
         </div>
-        <div class="versionBadge">v3.1.1 BETA</div>
+        <div class="versionBadge">v3.3 BETA</div>
     </header>
 
     <div id="installHelp" class="installHelp hidden"></div>
@@ -145,8 +145,9 @@
                         <input id="pilotCameraInput" class="hidden" type="file" accept="image/*" capture="user">
                         <input id="pilotGalleryInput" class="hidden" type="file" accept="image/*">
                     </div>
-                    <div class="pilotAdd">
+                    <div class="pilotAdd pilotAddFields">
                         <input id="pilotName" type="text" placeholder="Фамилия Имя">
+                        <input id="pilotClub" type="text" placeholder="Клуб (необязательно)">
                         <button id="addPilot">Создать и добавить</button>
                     </div>
                     <div class="pilotDatabaseActions">
@@ -227,6 +228,29 @@
             </div>
         </div>
 
+        <div id="pilotEditModal" class="modalBackdrop hidden" role="dialog" aria-modal="true" aria-labelledby="pilotEditTitle">
+            <div class="modalPanel">
+                <div class="modalHeader"><div><span>ПРОФИЛЬ ПИЛОТА</span><h2 id="pilotEditTitle">Редактировать</h2></div><button id="closePilotEdit" class="iconButton" aria-label="Закрыть">×</button></div>
+                <div class="pilotPhotoEditor">
+                    <div id="editPilotPhotoPreview" class="pilotPhotoPlaceholder"><span>👤</span></div>
+                    <div class="pilotPhotoActions">
+                        <button id="editTakePilotPhoto" type="button" class="secondaryButton">📷 Сфотографировать</button>
+                        <button id="editUploadPilotPhoto" type="button" class="secondaryButton">🖼 Загрузить фото</button>
+                        <button id="editClearPilotPhoto" type="button" class="ghostAction hidden">Убрать фото</button>
+                    </div>
+                    <input id="editPilotCameraInput" class="hidden" type="file" accept="image/*" capture="user">
+                    <input id="editPilotGalleryInput" class="hidden" type="file" accept="image/*">
+                </div>
+                <div class="editPilotFields">
+                    <label for="editPilotName">Фамилия Имя</label>
+                    <input id="editPilotName" type="text">
+                    <label for="editPilotClub">Клуб</label>
+                    <input id="editPilotClub" type="text" placeholder="Необязательно">
+                </div>
+                <button id="savePilotEdit" type="button">Сохранить изменения</button>
+            </div>
+        </div>
+
         <section id="archiveView" class="appScreen card hidden">
             <div class="screenHero compactHero"><div><span>ИСТОРИЯ</span><h1>Архив</h1></div><button class="ghostAction" data-route="home">← Меню</button></div>
             <div class="sectionTitleRow">
@@ -252,6 +276,8 @@
         <section id="settingsView" class="appScreen card hidden">
             <div class="screenHero compactHero"><div><span>СИСТЕМА</span><h1>Настройки</h1></div><button class="ghostAction" data-route="home">← Меню</button></div>
             <div class="settingsGrid">
+                <article class="settingsCard"><span>🌐</span><div><h3>Язык</h3><p>Выберите язык интерфейса приложения.</p></div><select id="languageSelect" class="settingsSelect"><option value="ru">Русский</option><option value="en">English</option></select></article>
+                <article class="settingsCard disabledSettings"><span>◐</span><div><h3>Темы</h3><p>Дополнительные темы оформления появятся позже.</p></div><button type="button" disabled>Скоро</button></article>
                 <article class="settingsCard"><span>↧</span><div><h3>Экспорт гонки</h3><p>Сохранить полную резервную копию в JSON.</p></div><button id="exportRace">Скачать</button></article>
                 <article class="settingsCard dangerSettings"><span>×</span><div><h3>Отменить текущую гонку</h3><p>Удалить незавершённую гонку. Архив не пострадает.</p></div><button id="clearRace">Отменить</button></article>
                 <article class="settingsCard"><span>▣</span><div><h3>PWA-приложение</h3><p>Устанавливается на экран iPhone и работает офлайн.</p></div><button id="showInstallInfo">Инструкция</button></article>
@@ -280,12 +306,13 @@
 
 <footer>Legion RC Penza · RallyCross Manager</footer>
 
-<script src="data.js?v=3.1.1"></script>
-<script src="score.js?v=3.1.1"></script>
-<script src="qualifying.js?v=3.1.1"></script>
-<script src="finals.js?v=3.1.1"></script>
-<script src="championship.js?v=3.1.1"></script>
-<script src="app.js?v=3.1.1"></script>
-<script src="pwa.js?v=3.1.1"></script>
+<script src="i18n.js?v=3.3"></script>
+<script src="data.js?v=3.3"></script>
+<script src="score.js?v=3.3"></script>
+<script src="qualifying.js?v=3.3"></script>
+<script src="finals.js?v=3.3"></script>
+<script src="championship.js?v=3.3"></script>
+<script src="app.js?v=3.3"></script>
+<script src="pwa.js?v=3.3"></script>
 </body>
 </html>

@@ -451,3 +451,8 @@ button{
 /* v3.2.1 Beta — cleaner standings and final result alignment */
 .pilotTableName{white-space:nowrap}
 .savedResultRow .resultPosition{min-width:36px;text-align:right;padding-right:4px}
+
+
+/* v3.3 Beta — pilot editing, clubs, language and themes */
+.pilotAddFields{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto}.pilotAddFields button{width:auto}.pilotRowInfo:has(small:empty) small{display:none}.pilotClubName{color:#aeb5bf!important;font-style:normal!important;font-weight:600!important;letter-spacing:0!important;text-transform:none!important}.legionClubMark{display:block}.databaseCardActions{flex-wrap:wrap}.editPilotFields{display:grid;gap:7px;margin:18px 0}.editPilotFields label{margin-top:5px;color:#aeb5bf;font-size:12px}.settingsSelect{width:auto;min-width:130px;margin:0}.disabledSettings{opacity:.58}.disabledSettings button:disabled{cursor:not-allowed;opacity:.65}.modalPanel .pilotPhotoEditor{margin-top:10px}
+@media(max-width:700px){.pilotAddFields{grid-template-columns:1fr}.pilotAddFields button{width:100%}.settingsSelect{grid-column:1/-1;width:100%}.databaseCardActions{display:grid;grid-template-columns:1fr 1fr;width:100%}.databaseCardActions .deleteDbPilot{grid-column:1/-1}}

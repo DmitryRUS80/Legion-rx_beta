@@ -12,12 +12,15 @@ const publishAllowedInput = $("publishAllowed");
 const qualifyingSelect = $("qualifyingCount");
 const createRaceButton = $("createRace");
 const pilotInput = $("pilotName");
+const pilotClubInput = $("pilotClub");
 const addPilotButton = $("addPilot");
 const racePilotList = $("racePilotList");
 const pilotCounter = $("pilotCounter");
 const nextButton = $("nextStep");
 const PILOT_DB_KEY = "legionRxPilotDatabase";
 let pendingPilotPhoto = "";
+let editingPilotId = "";
+let pendingEditPilotPhoto = "";
 
 function escapeHtml(value) {
     return String(value ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
@@ -59,12 +62,12 @@ function savePilotDatabase(items) {
     localStorage.setItem(PILOT_DB_KEY, JSON.stringify(items));
 }
 
-function createPilotProfile(name, photo = "") {
+function createPilotProfile(name, photo = "", club = "") {
     const profile = {
         id: `profile-${Date.now()}-${Math.random().toString(16).slice(2)}`,
         name,
         photo,
-        club: "",
+        club: club.trim(),
         city: "",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
@@ -104,14 +107,16 @@ addPilotButton.addEventListener("click", () => {
     if (RaceData.pilots.some(p => p.name.toLowerCase() === name.toLowerCase())) return alert("Пилот уже добавлен в гонку.");
     const database = getPilotDatabase();
     let profile = database.find(item => item.name.toLowerCase() === name.toLowerCase());
-    if (!profile) profile = createPilotProfile(name, pendingPilotPhoto);
-    else if (pendingPilotPhoto) {
-        profile.photo = pendingPilotPhoto;
+    if (!profile) profile = createPilotProfile(name, pendingPilotPhoto, pilotClubInput.value);
+    else if (pendingPilotPhoto || pilotClubInput.value.trim()) {
+        if (pendingPilotPhoto) profile.photo = pendingPilotPhoto;
+        if (pilotClubInput.value.trim()) profile.club = pilotClubInput.value.trim();
         profile.updatedAt = new Date().toISOString();
         savePilotDatabase(database);
     }
     addProfileToRace(profile);
     pilotInput.value = "";
+    pilotClubInput.value = "";
     pendingPilotPhoto = "";
     updatePhotoPreview();
     drawPilots();
@@ -126,14 +131,22 @@ function pilotPhotoMarkup(photo, name) {
     return photo ? `<img src="${photo}" alt="Фото ${escapeHtml(name)}">` : `<span aria-hidden="true">👤</span>`;
 }
 
+function pilotClubMarkup(club) {
+    const value = String(club || "").trim();
+    if (!value) return "";
+    const normalized = value.toLowerCase().replace(/[^a-zа-я0-9]/gi, "");
+    if (["legionrx", "легионrx", "легионрх"].includes(normalized)) return `<small class="legionClubMark">LEGION <em>RX</em></small>`;
+    return `<small class="pilotClubName">${escapeHtml(value)}</small>`;
+}
+
 function pilotTableMarkup(pilot, extraClass = "") {
     if (!pilot) return `<strong class="pilotTableName ${extraClass}">—</strong>`;
     return `<strong class="pilotTableName ${extraClass}">${escapeHtml(pilot.name)}</strong>`;
 }
 
 function pilotFinalRowMarkup(pilot, index = null) {
-    if (!pilot) return `<div class="finalPilotIdentity"><div class="pilotRowPhoto qualifyingPilotPhoto"><span aria-hidden="true">👤</span></div><div class="pilotRowInfo qualifyingPilotInfo"><b>Удалённый пилот</b><small>LEGION <em>RX</em></small></div></div>`;
-    return `<div class="finalPilotIdentity">${index === null ? "" : `<div class="qualifyingPilotNumber">${index + 1}</div>`}<div class="pilotRowPhoto qualifyingPilotPhoto">${pilotPhotoMarkup(pilot.photo, pilot.name)}</div><div class="pilotRowInfo qualifyingPilotInfo"><b>${escapeHtml(pilot.name)}</b><small>LEGION <em>RX</em></small></div></div>`;
+    if (!pilot) return `<div class="finalPilotIdentity"><div class="pilotRowPhoto qualifyingPilotPhoto"><span aria-hidden="true">👤</span></div><div class="pilotRowInfo qualifyingPilotInfo"><b>Удалённый пилот</b></div></div>`;
+    return `<div class="finalPilotIdentity">${index === null ? "" : `<div class="qualifyingPilotNumber">${index + 1}</div>`}<div class="pilotRowPhoto qualifyingPilotPhoto">${pilotPhotoMarkup(pilot.photo, pilot.name)}</div><div class="pilotRowInfo qualifyingPilotInfo"><b>${escapeHtml(pilot.name)}</b>${pilotClubMarkup(pilot.club)}</div></div>`;
 }
 
 function drawPilots() {
@@ -141,7 +154,7 @@ function drawPilots() {
     RaceData.pilots.forEach((pilot,index) => {
         const row = document.createElement("article");
         row.className = "pilotRowCard";
-        row.innerHTML = `<div class="pilotRowNumber">${index+1}</div><div class="pilotRowPhoto">${pilotPhotoMarkup(pilot.photo, pilot.name)}</div><div class="pilotRowInfo"><b>${escapeHtml(pilot.name)}</b><small>LEGION <em>RX</em></small></div><button class="removeButton" data-id="${pilot.id}">Удалить</button>`;
+        row.innerHTML = `<div class="pilotRowNumber">${index+1}</div><div class="pilotRowPhoto">${pilotPhotoMarkup(pilot.photo, pilot.name)}</div><div class="pilotRowInfo"><b>${escapeHtml(pilot.name)}</b>${pilotClubMarkup(pilot.club)}</div><button class="removeButton" data-id="${pilot.id}">Удалить</button>`;
         racePilotList.appendChild(row);
     });
     racePilotList.querySelectorAll(".removeButton").forEach(button => button.addEventListener("click", () => { removePilot(button.dataset.id); drawPilots(); saveToBrowser(); updateHomeSummary(); }));
@@ -196,7 +209,7 @@ function drawPilotDatabase() {
     database.forEach((profile, index) => {
         const card = document.createElement("article");
         card.className = "pilotRowCard";
-        card.innerHTML = `<div class="pilotRowNumber">${index+1}</div><div class="pilotRowPhoto">${pilotPhotoMarkup(profile.photo, profile.name)}</div><div class="pilotRowInfo"><b>${escapeHtml(profile.name)}</b><small>LEGION <em>RX</em></small></div><div class="databaseCardActions"><button class="secondaryButton addDbPilot" data-id="${profile.id}">В гонку</button><button class="dangerMini deleteDbPilot" data-id="${profile.id}">Удалить</button></div>`;
+        card.innerHTML = `<div class="pilotRowNumber">${index+1}</div><div class="pilotRowPhoto">${pilotPhotoMarkup(profile.photo, profile.name)}</div><div class="pilotRowInfo"><b>${escapeHtml(profile.name)}</b>${pilotClubMarkup(profile.club)}</div><div class="databaseCardActions"><button class="secondaryButton addDbPilot" data-id="${profile.id}">В гонку</button><button class="secondaryButton editDbPilot" data-id="${profile.id}">Редактировать</button><button class="dangerMini deleteDbPilot" data-id="${profile.id}">Удалить</button></div>`;
         host.appendChild(card);
     });
     host.querySelectorAll(".addDbPilot").forEach(button => button.addEventListener("click", () => {
@@ -204,6 +217,7 @@ function drawPilotDatabase() {
         if (!profile || !addProfileToRace(profile)) return alert("Пилот уже добавлен в гонку.");
         drawPilots(); saveToBrowser(); updateHomeSummary();
     }));
+    host.querySelectorAll(".editDbPilot").forEach(button => button.addEventListener("click", () => openPilotEdit(button.dataset.id)));
     host.querySelectorAll(".deleteDbPilot").forEach(button => button.addEventListener("click", () => {
         const database = getPilotDatabase();
         const profile = database.find(item => item.id === button.dataset.id);
@@ -212,6 +226,63 @@ function drawPilotDatabase() {
         drawPilotDatabase(); drawPilotPicker();
     }));
 }
+
+function updateEditPhotoPreview() {
+    const box = $("editPilotPhotoPreview");
+    box.className = pendingEditPilotPhoto ? "pilotPhotoImage" : "pilotPhotoPlaceholder";
+    box.innerHTML = pendingEditPilotPhoto ? `<img src="${pendingEditPilotPhoto}" alt="Предпросмотр фото">` : "<span>👤</span>";
+    $("editClearPilotPhoto").classList.toggle("hidden", !pendingEditPilotPhoto);
+}
+
+function openPilotEdit(id) {
+    const profile = getPilotDatabase().find(item => item.id === id);
+    if (!profile) return;
+    editingPilotId = id;
+    pendingEditPilotPhoto = profile.photo || "";
+    $("editPilotName").value = profile.name || "";
+    $("editPilotClub").value = profile.club || "";
+    updateEditPhotoPreview();
+    $("pilotEditModal").classList.remove("hidden");
+}
+
+function closePilotEdit() {
+    $("pilotEditModal").classList.add("hidden");
+    editingPilotId = "";
+    pendingEditPilotPhoto = "";
+}
+
+async function processEditPilotPhoto(file) {
+    if (!file || !file.type.startsWith("image/")) return;
+    const source = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file); });
+    const image = await new Promise((resolve, reject) => { const img = new Image(); img.onload = () => resolve(img); img.onerror = reject; img.src = source; });
+    const size = Math.min(image.naturalWidth, image.naturalHeight);
+    const canvas = document.createElement("canvas"); canvas.width = 400; canvas.height = 400;
+    canvas.getContext("2d").drawImage(image, (image.naturalWidth-size)/2, (image.naturalHeight-size)/2, size, size, 0, 0, 400, 400);
+    pendingEditPilotPhoto = canvas.toDataURL("image/jpeg", .82);
+    updateEditPhotoPreview();
+}
+
+$("closePilotEdit").addEventListener("click", closePilotEdit);
+$("pilotEditModal").addEventListener("click", e => { if (e.target === $("pilotEditModal")) closePilotEdit(); });
+$("editTakePilotPhoto").addEventListener("click", () => $("editPilotCameraInput").click());
+$("editUploadPilotPhoto").addEventListener("click", () => $("editPilotGalleryInput").click());
+$("editPilotCameraInput").addEventListener("change", e => { processEditPilotPhoto(e.target.files[0]); e.target.value = ""; });
+$("editPilotGalleryInput").addEventListener("change", e => { processEditPilotPhoto(e.target.files[0]); e.target.value = ""; });
+$("editClearPilotPhoto").addEventListener("click", () => { pendingEditPilotPhoto = ""; updateEditPhotoPreview(); });
+$("savePilotEdit").addEventListener("click", () => {
+    const name = $("editPilotName").value.trim();
+    if (!name) return alert("Введите имя пилота.");
+    const database = getPilotDatabase();
+    const profile = database.find(item => item.id === editingPilotId);
+    if (!profile) return;
+    profile.name = name; profile.club = $("editPilotClub").value.trim(); profile.photo = pendingEditPilotPhoto; profile.updatedAt = new Date().toISOString();
+    savePilotDatabase(database);
+    RaceData.pilots.forEach(pilot => { if (pilot.profileId === profile.id) { pilot.name = profile.name; pilot.club = profile.club; pilot.photo = profile.photo; } });
+    saveToBrowser(); drawPilots(); drawPilotDatabase(); drawPilotPicker($("pilotDatabaseSearch").value);
+    if (RaceData.heats.length && typeof renderQualifying === "function") renderQualifying();
+    if (RaceData.finals.length && typeof drawFinals === "function") drawFinals();
+    closePilotEdit();
+});
 
 function drawPilotPicker(filter = "") {
     const host = $("pilotDatabasePickerList");
@@ -222,7 +293,7 @@ function drawPilotPicker(filter = "") {
         const already = RaceData.pilots.some(p => p.profileId === profile.id || p.name.toLowerCase() === profile.name.toLowerCase());
         const card = document.createElement("article");
         card.className = "pilotPickerCard";
-        card.innerHTML = `<div class="pilotRowPhoto">${pilotPhotoMarkup(profile.photo, profile.name)}</div><div class="pilotRowInfo"><b>${escapeHtml(profile.name)}</b><small>LEGION <em>RX</em></small></div><button data-id="${profile.id}" ${already ? "disabled" : ""}>${already ? "Добавлен" : "Добавить"}</button>`;
+        card.innerHTML = `<div class="pilotRowPhoto">${pilotPhotoMarkup(profile.photo, profile.name)}</div><div class="pilotRowInfo"><b>${escapeHtml(profile.name)}</b>${pilotClubMarkup(profile.club)}</div><button data-id="${profile.id}" ${already ? "disabled" : ""}>${already ? "Добавлен" : "Добавить"}</button>`;
         host.appendChild(card);
     });
     host.querySelectorAll("button:not(:disabled)").forEach(button => button.addEventListener("click", () => {
@@ -535,6 +606,8 @@ $("showInstallInfo").addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 });
 bindRouteButtons();
+$("languageSelect").value = window.LegionI18n?.getLanguage?.() || "ru";
+$("languageSelect").addEventListener("change", e => window.LegionI18n?.setLanguage?.(e.target.value));
 
 if (loadFromBrowser()) {
     eventNameInput.value = RaceData.eventName || "";
