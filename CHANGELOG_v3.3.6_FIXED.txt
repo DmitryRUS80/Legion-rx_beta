@@ -1,0 +1,7 @@
+Legion RX v3.3.6 Beta FIXED
+
+- Rebuilt from stable v3.3.5 functional code.
+- New dark concept styling applied without DOM-rewriting JavaScript.
+- Removed the experimental UI runtime layer that could block navigation/buttons.
+- Preserved all IDs, event handlers, storage keys and race logic.
+- Updated PWA cache to legion-rx-v3.3.6-fixed.

@@ -1,4 +1,4 @@
-/* Legion RX Championship Edition v3.3.6 Beta */
+/* Legion RX Championship Edition v3.3.5 Beta */
 
 const $ = id => document.getElementById(id);
 const eventNameInput = $("eventName");
