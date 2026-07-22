@@ -24,6 +24,69 @@ const en = {
   'Квалификация — стартовые позиции':'Qualifying — starting positions','Финал A — стартовые позиции':'Final A — starting positions','ГЛАВНЫЙ ФИНАЛ':'MAIN FINAL','КВАЛИФИКАЦИЯ':'QUALIFYING','прямой проход':'direct advancement','зачёт двух лучших результатов':'best two results count','↑ 2 МЕСТА':'↑ 2 POSITIONS',
   'Руководство пользователя':'User guide','1. Создание соревнования':'1. Creating a race','2. Участники':'2. Drivers','3. Квалификация':'3. Qualifying','4. Финальная стадия':'4. Finals stage','5. Ввод результатов':'5. Entering results','6. Экспорт':'6. Export','Спортивный регламент Legion RX Championship':'Legion RX Championship sporting regulations','2. Что такое LCQ':'2. What is LCQ','3. Финальная система':'3. Finals system','4. Как формируется решётка Финала A':'4. How the Final A grid is formed',
   'Закрыть':'Close','На главную':'Home','Навигация':'Navigation','Предпросмотр фото':'Photo preview','Фото':'Photo','Фото пилота':'Driver photo','English':'English'
+  ,'Выберите тип соревнования, заполните название, дату и место проведения.':'Select the race type and enter its name, date and location.'
+  ,'Добавьте пилотов. Порядок регистрации не заменяет спортивный результат: стартовые позиции определяются квалификацией.':'Add drivers. Registration order does not replace sporting results: starting positions are determined by qualifying.'
+  ,'Создайте серии, внесите результаты и сохраните каждый заезд. В итоговый рейтинг входят три лучших результата пилота — Best 3.':'Create qualifying rounds, enter the results and save every heat. The driver’s three best results — Best 3 — count toward the qualifying standings.'
+  ,'Нажмите «Сформировать финалы». Программа автоматически выберет схему по количеству участников, построит LCQ и три заезда Финала A.':'Tap “Generate finals”. The app automatically selects the format according to the number of drivers, creates the LCQ structure and the three Final A heats.'
+  ,'Сохраняйте заезды по порядку. После A3 программа автоматически рассчитает два лучших результата из трёх и сформирует итоговый протокол.':'Save the heats in order. After A3, the app automatically calculates the best two results out of three and generates the final report.'
+  ,'Кнопка «PDF / Печать» создаёт печатный документ, «Скачать PNG» — изображение итогов.':'“PDF / Print” creates a printable document, while “Download PNG” creates an image of the results.'
+  ,'1. Квалификация':'1. Qualifying'
+  ,'Квалификационная система не меняется. В одном заезде участвует до 6 машин, дистанция —':'The qualifying system remains unchanged. Up to 6 cars take part in one heat; the distance is'
+  ,'5 кругов':'5 laps'
+  ,'Проводится 3–5 серий, в зачёт входят три лучших результата пилота (':'There are 3–5 qualifying rounds, and the driver’s three best results count ('
+  ,'Best 3':'Best 3'
+  ,'Итог квалификации определяет посев, прямой проход в Финал A, состав отборочных заездов и стартовые позиции.':'The qualifying standings determine seeding, direct advancement to Final A, LCQ composition and starting positions.'
+  ,'Квалификация — стартовые позиции':'Qualifying — starting positions'
+  ,'НАПРАВЛЕНИЕ ДВИЖЕНИЯ':'DIRECTION OF TRAVEL'
+  ,'Машина изображается вертикальным прямоугольником. Над каждой машиной находится':'Each car is shown as a vertical rectangle. Above every car there is a'
+  ,'отдельная':'separate'
+  ,'П-образная стартовая скоба. Скоба шире машины и не касается её: между ними сохраняется видимый зазор.':'U-shaped starting bracket. The bracket is wider than the car and does not touch it, leaving a visible gap.'
+  ,'LCQ — Last Chance Qualifier':'LCQ — Last Chance Qualifier'
+  ,'или «заезд последнего шанса». Это отборочный заезд для пилотов, которые не получили прямой проход в Финал A. Старт LCQ всегда формируется по результатам квалификации.':'or “last chance race”. It is a qualifying race for drivers who did not advance directly to Final A. The LCQ starting order is always based on qualifying results.'
+  ,'1–6 участников':'1–6 drivers'
+  ,'Все пилоты проходят в Финал A. Проводятся три заезда:':'All drivers advance to Final A. Three heats are held:'
+  ,'A1, A2 и A3':'A1, A2 and A3'
+  ,'Во всех трёх заездах стартовый порядок одинаковый — по квалификации.':'The starting order is identical in all three heats and follows qualifying.'
+  ,'7–10 участников':'7–10 drivers'
+  ,'Первые 4 пилота квалификации проходят напрямую. Остальные стартуют в одном LCQ.':'The top 4 drivers in qualifying advance directly. The remaining drivers compete in one LCQ.'
+  ,'Первые два на финише':'The first two finishers'
+  ,'получают позиции 5 и 6 Финала A.':'receive positions 5 and 6 in Final A.'
+  ,'11–16 участников':'11–16 drivers'
+  ,'Первые 4 проходят напрямую. Остальные распределяются «змейкой» в LCQ B и LCQ C. Из каждого заезда проходит':'The top 4 advance directly. The remaining drivers are distributed in a snake pattern between LCQ B and LCQ C. From each race, only the'
+  ,'только победитель':'winner advances'
+  ,'17 и более участников':'17 or more drivers'
+  ,'Создаются предварительные LCQ максимум по 6 машин. Победители переходят выше. В заключительном LCQ два лучших получают последние места Финала A.':'Preliminary LCQs are created with a maximum of 6 cars each. Winners advance upward. In the final LCQ, the top two receive the last places in Final A.'
+  ,'Позиции 1–4':'Positions 1–4'
+  ,'Четыре лучших пилота квалификации. Они проходят напрямую.':'The four best qualifying drivers. They advance directly.'
+  ,'Позиции 5–6 при одном LCQ':'Positions 5–6 with one LCQ'
+  ,'Победитель LCQ стартует пятым, второе место — шестым. Квалификация не может переставить их местами.':'The LCQ winner starts fifth and the second-place finisher starts sixth. Qualifying cannot reverse their order.'
+  ,'Позиции 5–6 при LCQ B/C':'Positions 5–6 with LCQ B/C'
+  ,'Оба пилота являются победителями разных заездов. Выше стартует тот, кто был выше в квалификации.':'Both drivers are winners of different races. The driver ranked higher in qualifying starts ahead.'
+  ,'Финал A — стартовые позиции':'Final A — starting positions'
+  ,'Эта схема является эталонной для приложения: каждый следующий ряд смещён вправо. Скоба всегда расположена отдельно над машиной, шире корпуса и не пересекает его.':'This layout is the app standard: each following row is offset to the right. The bracket is always separate above the car, wider than its body and never overlaps it.'
+  ,'5. Три заезда Финала A':'5. Three Final A heats'
+  ,'Финал A состоит из трёх заездов по':'Final A consists of three heats of'
+  ,'7 кругов':'7 laps'
+  ,'A1, A2 и A3. Стартовая решётка во всех трёх заездах остаётся одинаковой.':'A1, A2 and A3. The starting grid remains the same in all three heats.'
+  ,'За место начисляются штрафные очки: 1-е место — 1, 2-е — 2, далее по занятому месту. DNF, DNS и DSQ дают 7 очков. В итог входят':'Penalty points are awarded by finishing position: 1st place — 1, 2nd — 2, and so on. DNF, DNS and DSQ score 7 points. The final result uses the'
+  ,'два лучших результата из трёх':'best two results out of three'
+  ,'Побеждает пилот с наименьшей суммой.':'The driver with the lowest total wins.'
+  ,'6. Равенство очков в Финале A':'6. Ties in Final A'
+  ,'При равной сумме применяются последовательно:':'If totals are equal, the following tie-breakers are applied in order:'
+  ,'Большее количество побед в A1–A3.':'More wins in A1–A3.'
+  ,'Большее количество вторых мест.':'More second-place finishes.'
+  ,'Лучший результат в A3.':'Better result in A3.'
+  ,'Более высокое место в квалификации.':'Higher qualifying position.'
+  ,'ОТБОР':'LCQ'
+  ,'честный проход по финишу':'advancement by finishing result'
+  ,'7. Очки этапа':'7. Round points'
+  ,'По итоговому протоколу первые 10 пилотов получают очки:':'According to the final report, the top 10 drivers receive points:'
+  ,'Обозначения':'Terms'
+  ,'Last Chance Qualifier — заезд последнего шанса для прохода в Финал A.':'Last Chance Qualifier — a last-chance race for advancement to Final A.'
+  ,'Did Not Start — пилот не стартовал.':'Did Not Start — the driver did not start.'
+  ,'Did Not Finish — пилот стартовал, но не финишировал.':'Did Not Finish — the driver started but did not finish.'
+  ,'Disqualified — дисквалификация.':'Disqualified — the driver was disqualified.'
+  ,'Три лучших результата пилота в квалификационных сериях.':'The driver’s three best results from the qualifying rounds.'
   ,'ФОТО ПИЛОТА':'DRIVER PHOTO','Выберите область фотографии':'Choose the photo area','Перемещайте фотографию пальцем или мышью. Используйте два пальца или ползунок для масштаба.':'Move the photo with your finger or mouse. Use two fingers or the slider to zoom.','Масштаб':'Zoom','Размер рамки':'Crop frame size','↻ Повернуть':'↻ Rotate','Повернуть':'Rotate','Сбросить':'Reset','Оптимизировано для Legion RX':'Optimized for Legion RX','Готово':'Done','Фотография для кадрирования':'Photo to crop','Не удалось открыть фотографию.':'Could not open the photo.'
 
 };
@@ -57,12 +120,14 @@ function translate(value) {
   return source;
 }
 
+const originalTextNodes = new WeakMap();
+
 function translateTextNode(node) {
   const raw = node.nodeValue;
   const trimmed = raw.trim();
   if (!trimmed) return;
-  if (!node.parentElement?.dataset.ruText) node.parentElement && (node.parentElement.dataset.ruText = trimmed);
-  const source = node.parentElement?.dataset.ruText || trimmed;
+  if (!originalTextNodes.has(node)) originalTextNodes.set(node, trimmed);
+  const source = originalTextNodes.get(node);
   const translated = translate(source);
   node.nodeValue = raw.replace(trimmed, translated);
 }
