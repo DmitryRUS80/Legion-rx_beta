@@ -1,0 +1,8 @@
+Legion RX Championship Edition v3.3.7 Beta
+
+- Unified settings-screen SVG icons.
+- Icons enlarged and aligned with the main UI icon style.
+- Language selector now shows Russian and British flags.
+- Added three persistent color themes: RX Red, Track Blue and Carbon Gold.
+- Theme choice is saved locally and restored offline.
+- Race logic and saved data structure were not changed.

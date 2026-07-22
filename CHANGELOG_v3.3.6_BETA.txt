@@ -1,17 +1,12 @@
-LEGION RX CHAMPIONSHIP EDITION v3.3.6 BETA
-DESIGN CONCEPT TEST BUILD
+LEGION RX CHAMPIONSHIP EDITION — v3.3.6 BETA
 
-Что изменено:
-- Полностью переработан визуальный слой приложения по утверждённому концепту.
-- Единая система контурных SVG-иконок вместо разностильных эмодзи и символов.
-- Главное меню перестроено в компактную панель управления с плитками.
-- Обновлены шапка, карточки, формы, таблицы, кнопки, нижняя навигация и модальные окна.
-- Добавлена мягкая анимация перехода между разделами.
-- Правила и карточки на телефоне поддерживают горизонтальное перелистывание со scroll-snap.
-- Добавлен переключатель плотности интерфейса в шапке (обычный / компактный режим).
-- Сохранена вся логика версии 3.3.5: пилоты, фото, квалификации, финалы, чемпионаты, архив, экспорт и локализация.
-- Ключи локального хранилища и структура пользовательских данных не менялись.
-- PWA-кэш обновлён до v3.3.6.
+UI POLISH: UNIFIED ICON SYSTEM
 
-Важно:
-Это отдельная тестовая сборка интерфейса. Рекомендуется проверять её отдельно на компьютере и телефоне перед переносом дизайна в основную ветку.
+- Replaced mixed emoji/symbol icons with one coherent inline SVG icon set.
+- Kept the championship trophy gold as the branded exception.
+- Enlarged menu and navigation icons by approximately 20%.
+- Added clearer icons for race, qualifying, finals, results, drivers, archive and settings.
+- Replaced pilot placeholder with a racing helmet.
+- Replaced camera, gallery, remove-photo and close symbols with matching SVG icons.
+- No race logic, saved-data structure, pilot database or archive logic was changed.
+- Updated PWA cache to v3.3.6 Beta.
