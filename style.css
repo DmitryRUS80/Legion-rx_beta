@@ -464,3 +464,54 @@ button{
 body.cropEditorOpen{overflow:hidden;touch-action:none}
 .cropModal{z-index:1400;padding:10px}.cropModalPanel{width:min(520px,100%);max-height:96vh;padding:16px;overflow:auto}.cropHelp{margin:-4px 0 12px;color:#929ba7;font-size:12px;line-height:1.45}.photoCropStage{position:relative;width:min(100%,420px);aspect-ratio:1;margin:0 auto;overflow:hidden;border-radius:14px;background:#050608;touch-action:none;user-select:none;cursor:grab}.photoCropStage:active{cursor:grabbing}.photoCropImage{position:absolute;left:50%;top:50%;max-width:none;max-height:none;transform-origin:center center;will-change:transform;pointer-events:none}.photoCropShade{display:none}.photoCropFrame{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:2px solid #fff;border-radius:6px;box-shadow:0 0 0 9999px rgba(0,0,0,.55);pointer-events:none}.photoCropFrame:before,.photoCropFrame:after{content:"";position:absolute;background:rgba(255,255,255,.35)}.photoCropFrame:before{inset:0;background:linear-gradient(90deg,transparent 33.1%,rgba(255,255,255,.3) 33.2% 33.5%,transparent 33.6% 66.4%,rgba(255,255,255,.3) 66.5% 66.8%,transparent 66.9%)}.photoCropFrame:after{inset:0;background:linear-gradient(0deg,transparent 33.1%,rgba(255,255,255,.3) 33.2% 33.5%,transparent 33.6% 66.4%,rgba(255,255,255,.3) 66.5% 66.8%,transparent 66.9%)}.photoCropFrame span{position:absolute;width:20px;height:20px;border-color:#ef2b2d}.photoCropFrame span:nth-child(1){left:-3px;top:-3px;border-left:4px solid #ef2b2d;border-top:4px solid #ef2b2d}.photoCropFrame span:nth-child(2){right:-3px;top:-3px;border-right:4px solid #ef2b2d;border-top:4px solid #ef2b2d}.photoCropFrame span:nth-child(3){left:-3px;bottom:-3px;border-left:4px solid #ef2b2d;border-bottom:4px solid #ef2b2d}.photoCropFrame span:nth-child(4){right:-3px;bottom:-3px;border-right:4px solid #ef2b2d;border-bottom:4px solid #ef2b2d}.cropControls{display:grid;gap:10px;margin:14px 0}.cropControls label{display:grid;grid-template-columns:105px minmax(0,1fr);align-items:center;gap:10px;color:#cfd4db;font-size:12px}.cropControls input[type=range]{width:100%;accent-color:#ef2b2d}.cropToolRow,.cropFooterActions{display:flex;gap:9px}.cropToolRow button,.cropFooterActions button{width:auto;margin:0}.cropToolRow button{flex:1}.cropOutputNote{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:12px 0;padding:10px 12px;border:1px solid #29313b;border-radius:10px;background:#11161d}.cropOutputNote b{color:#fff;font-size:13px}.cropOutputNote span{color:#8e98a4;font-size:11px}.cropFooterActions{justify-content:flex-end;margin-top:12px}.cropFooterActions #photoCropDone{min-width:120px}.cropFooterActions .ghostAction{min-width:100px}
 @media(max-width:560px){.cropModal{padding:0}.cropModalPanel{max-height:100dvh;border-radius:0;padding:14px}.photoCropStage{width:100%;max-width:390px}.cropControls label{grid-template-columns:88px minmax(0,1fr)}.cropOutputNote{align-items:flex-start;flex-direction:column;gap:3px}.cropFooterActions button{flex:1}.cropToolRow button{padding:10px 8px;font-size:12px}}
+
+/* v3.3.3 Beta — responsive Final A starting grid
+   The grid owns the geometry; pilot photos and names no longer widen or shift it. */
+.finalGrid.startGrid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(0,1fr));
+  grid-auto-rows:auto;
+  column-gap:0;
+  row-gap:24px;
+  width:min(430px,100%);
+  max-width:430px;
+  margin:0 auto 25px;
+  padding:0 4px;
+  overflow:hidden;
+  box-sizing:border-box;
+}
+.finalGrid.startGrid .startGridEntry{
+  width:100%;
+  min-width:0;
+  transform:none!important;
+  justify-self:stretch;
+}
+.finalGrid.startGrid .startGridEntry:nth-child(1){grid-column:1 / span 2;grid-row:1}
+.finalGrid.startGrid .startGridEntry:nth-child(2){grid-column:4 / span 2;grid-row:1}
+.finalGrid.startGrid .startGridEntry:nth-child(3){grid-column:2 / span 2;grid-row:2}
+.finalGrid.startGrid .startGridEntry:nth-child(4){grid-column:5 / span 2;grid-row:2}
+.finalGrid.startGrid .startGridEntry:nth-child(5){grid-column:3 / span 2;grid-row:3}
+.finalGrid.startGrid .startGridEntry:nth-child(6){grid-column:6 / span 2;grid-row:3}
+.finalGrid.startGrid .startGridName{
+  width:100%;
+  max-width:88px;
+  min-height:2.5em;
+  margin-top:8px;
+  overflow:hidden;
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow-wrap:anywhere;
+}
+@media(max-width:560px){
+  .finalGrid.startGrid{width:100%;max-width:390px;row-gap:22px;padding:0}
+  .finalGrid.startGrid .startGridPhoto{width:54px;height:54px}
+  .finalGrid.startGrid .startBracket{width:68px}
+  .finalGrid.startGrid .startGridName{max-width:76px;font-size:10px}
+}
+@media(max-width:390px){
+  .finalGrid.startGrid .startGridPhoto{width:50px;height:50px}
+  .finalGrid.startGrid .startBracket{width:62px}
+  .finalGrid.startGrid .startGridPosition{right:-7px;bottom:-7px;width:25px;height:25px;font-size:12px}
+  .finalGrid.startGrid .startGridName{max-width:68px;font-size:9.5px}
+}
