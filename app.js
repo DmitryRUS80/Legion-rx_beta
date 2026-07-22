@@ -1,4 +1,4 @@
-/* Legion RX Championship Edition v3.3.4 Beta */
+/* Legion RX Championship Edition v3.3.6 Beta */
 
 const $ = id => document.getElementById(id);
 const eventNameInput = $("eventName");
@@ -797,81 +797,41 @@ updateHomeSummary();
 navigateTo("home");
 
 
-const HELP_SECTIONS={
+const HELP_SECTIONS_RU={
  manual:`<div class="guideContent"><h2>Руководство пользователя</h2><h3>1. Создание соревнования</h3><p>Выберите тип соревнования, заполните название, дату и место проведения.</p><h3>2. Участники</h3><p>Добавьте пилотов. Порядок регистрации не заменяет спортивный результат: стартовые позиции определяются квалификацией.</p><h3>3. Квалификация</h3><p>Создайте серии, внесите результаты и сохраните каждый заезд. В итоговый рейтинг входят три лучших результата пилота — Best 3.</p><h3>4. Финальная стадия</h3><p>Нажмите «Сформировать финалы». Программа автоматически выберет схему по количеству участников, построит LCQ и три заезда Финала A.</p><h3>5. Ввод результатов</h3><p>Сохраняйте заезды по порядку. После A3 программа автоматически рассчитает два лучших результата из трёх и сформирует итоговый протокол.</p><h3>6. Экспорт</h3><p>Кнопка «PDF / Печать» создаёт печатный документ, «Скачать PNG» — изображение итогов.</p></div>`,
  raceguide:`<div class="guideContent">
 <h2>Спортивный регламент Legion RX Championship</h2>
-
 <h3>1. Квалификация</h3>
 <p>Квалификационная система не меняется. В одном заезде участвует до 6 машин, дистанция — <b>5 кругов</b>. Проводится 3–5 серий, в зачёт входят три лучших результата пилота (<b>Best 3</b>).</p>
 <p>Итог квалификации определяет посев, прямой проход в Финал A, состав отборочных заездов и стартовые позиции.</p>
-
-<div class="raceGuideVisual">
-  <div class="guideVisualTitle">Квалификация — стартовые позиции</div>
-  <div class="rxGridDiagram rxQualifyingGrid" role="img" aria-label="Шесть вертикальных машин стоят в один ряд; над каждой машиной находится отдельная П-образная стартовая скоба">
-    <div class="rxDirection"><span>↑</span><b>НАПРАВЛЕНИЕ ДВИЖЕНИЯ</b></div>
-    <div class="rxTrack"><div class="rxQualifyingRow">
-      <span class="rxCar pole"><i></i><b>1</b></span><span class="rxCar"><i></i><b>2</b></span><span class="rxCar"><i></i><b>3</b></span><span class="rxCar"><i></i><b>4</b></span><span class="rxCar"><i></i><b>5</b></span><span class="rxCar"><i></i><b>6</b></span>
-    </div></div>
-  </div>
-  <p class="guideCaption">Машина изображается вертикальным прямоугольником. Над каждой машиной находится <b>отдельная</b> П-образная стартовая скоба. Скоба шире машины и не касается её: между ними сохраняется видимый зазор.</p>
-</div>
-
-<h3>2. Что такое LCQ</h3>
-<p><b>LCQ — Last Chance Qualifier</b>, или «заезд последнего шанса». Это отборочный заезд для пилотов, которые не получили прямой проход в Финал A. Старт LCQ всегда формируется по результатам квалификации.</p>
-
-<h3>3. Финальная система</h3>
-<div class="rxRuleCards">
-  <div class="rxRuleCard"><strong>1–6 участников</strong><span>Все пилоты проходят в Финал A. Проводятся три заезда: <b>A1, A2 и A3</b>. Во всех трёх заездах стартовый порядок одинаковый — по квалификации.</span></div>
-  <div class="rxRuleCard"><strong>7–10 участников</strong><span>Первые 4 пилота квалификации проходят напрямую. Остальные стартуют в одном LCQ. <b>Первые два на финише</b> получают позиции 5 и 6 Финала A.</span></div>
-  <div class="rxRuleCard"><strong>11–16 участников</strong><span>Первые 4 проходят напрямую. Остальные распределяются «змейкой» в LCQ B и LCQ C. Из каждого заезда проходит <b>только победитель</b>.</span></div>
-  <div class="rxRuleCard"><strong>17 и более участников</strong><span>Создаются предварительные LCQ максимум по 6 машин. Победители переходят выше. В заключительном LCQ два лучших получают последние места Финала A.</span></div>
-</div>
-
-<h3>4. Как формируется решётка Финала A</h3>
-<div class="rxGridOrder">
-  <div><b>Позиции 1–4</b><span>Четыре лучших пилота квалификации. Они проходят напрямую.</span></div>
-  <div><b>Позиции 5–6 при одном LCQ</b><span>Победитель LCQ стартует пятым, второе место — шестым. Квалификация не может переставить их местами.</span></div>
-  <div><b>Позиции 5–6 при LCQ B/C</b><span>Оба пилота являются победителями разных заездов. Выше стартует тот, кто был выше в квалификации.</span></div>
-</div>
-
-<div class="raceGuideVisual">
-  <div class="guideVisualTitle">Финал A — стартовые позиции</div>
-  <div class="rxGridDiagram rxFinalGrid" role="img" aria-label="В финале шесть вертикальных машин стоят в три ряда; над каждой машиной отдельная П-образная скоба">
-    <div class="rxDirection"><span>↑</span><b>НАПРАВЛЕНИЕ ДВИЖЕНИЯ</b></div>
-    <div class="rxTrack"><div class="rxFinalRows">
-      <div class="rxFinalRow rowOne"><span class="rxCar pole"><i></i><b>1</b></span><span class="rxCar"><i></i><b>2</b></span></div>
-      <div class="rxFinalRow rowTwo"><span class="rxCar"><i></i><b>3</b></span><span class="rxCar"><i></i><b>4</b></span></div>
-      <div class="rxFinalRow rowThree"><span class="rxCar"><i></i><b>5</b></span><span class="rxCar"><i></i><b>6</b></span></div>
-    </div></div>
-  </div>
-  <p class="guideCaption">Эта схема является эталонной для приложения: каждый следующий ряд смещён вправо. Скоба всегда расположена отдельно над машиной, шире корпуса и не пересекает его.</p>
-</div>
-
-<h3>5. Три заезда Финала A</h3>
-<p>Финал A состоит из трёх заездов по <b>7 кругов</b>: A1, A2 и A3. Стартовая решётка во всех трёх заездах остаётся одинаковой.</p>
-<p>За место начисляются штрафные очки: 1-е место — 1, 2-е — 2, далее по занятому месту. DNF, DNS и DSQ дают 7 очков. В итог входят <b>два лучших результата из трёх</b>. Побеждает пилот с наименьшей суммой.</p>
-
-<h3>6. Равенство очков в Финале A</h3>
-<p>При равной сумме применяются последовательно:</p>
-<div class="rxGridOrder">
-  <div><b>1</b><span>Большее количество побед в A1–A3.</span></div>
-  <div><b>2</b><span>Большее количество вторых мест.</span></div>
-  <div><b>3</b><span>Лучший результат в A3.</span></div>
-  <div><b>4</b><span>Более высокое место в квалификации.</span></div>
-</div>
-
-<div class="rxProgression" role="img" aria-label="Квалификация: первые четыре напрямую в Финал A, остальные через LCQ; затем три заезда A1 A2 A3">
-  <div class="rxProgressFinal"><span>ГЛАВНЫЙ ФИНАЛ</span><b>A1 + A2 + A3</b><em>зачёт двух лучших результатов</em></div>
-  <div class="rxProgressLinks"><div class="rxProgressLink"><span class="rxAdvanceCount">↑ TOP 4</span><i></i></div><div class="rxProgressLink"><span class="rxAdvanceCount">↑ 2 МЕСТА</span><i></i></div></div>
-  <div class="rxProgressSemis"><div class="rxProgressBlock"><span>КВАЛИФИКАЦИЯ</span><b>TOP 4</b><em>прямой проход</em></div><div class="rxProgressBlock"><span>ОТБОР</span><b>LCQ</b><em>честный проход по финишу</em></div></div>
-</div>
-
-<h3>7. Очки этапа</h3>
-<p>По итоговому протоколу первые 10 пилотов получают очки: <b>25–18–15–12–10–8–6–4–2–1</b>.</p>
-<div class="pointsGuide"><span><b>1</b>25</span><span><b>2</b>18</span><span><b>3</b>15</span><span><b>4</b>12</span><span><b>5</b>10</span><span><b>6</b>8</span><span><b>7</b>6</span><span><b>8</b>4</span><span><b>9</b>2</span><span><b>10</b>1</span></div>
-</div>`,
- terms:`<div class="guideContent"><h2>Обозначения</h2><dl class="termsList"><dt>LCQ</dt><dd>Last Chance Qualifier — заезд последнего шанса для прохода в Финал A.</dd><dt>DNS</dt><dd>Did Not Start — пилот не стартовал.</dd><dt>DNF</dt><dd>Did Not Finish — пилот стартовал, но не финишировал.</dd><dt>DSQ</dt><dd>Disqualified — дисквалификация.</dd><dt>Best 3</dt><dd>Три лучших результата пилота в квалификационных сериях.</dd></dl></div>`};
-function renderHelp(key){document.querySelectorAll('.helpTab').forEach(b=>b.classList.toggle('active',b.dataset.help===key));$('helpContent').innerHTML=HELP_SECTIONS[key]||HELP_SECTIONS.manual}
+<div class="raceGuideVisual"><div class="guideVisualTitle">Квалификация — стартовые позиции</div><div class="rxGridDiagram rxQualifyingGrid" role="img" aria-label="Шесть вертикальных машин стоят в один ряд; над каждой машиной находится отдельная П-образная стартовая скоба"><div class="rxDirection"><span>↑</span><b>НАПРАВЛЕНИЕ ДВИЖЕНИЯ</b></div><div class="rxTrack"><div class="rxQualifyingRow"><span class="rxCar pole"><i></i><b>1</b></span><span class="rxCar"><i></i><b>2</b></span><span class="rxCar"><i></i><b>3</b></span><span class="rxCar"><i></i><b>4</b></span><span class="rxCar"><i></i><b>5</b></span><span class="rxCar"><i></i><b>6</b></span></div></div></div><p class="guideCaption">Машина изображается вертикальным прямоугольником. Над каждой машиной находится <b>отдельная</b> П-образная стартовая скоба. Скоба шире машины и не касается её: между ними сохраняется видимый зазор.</p></div>
+<h3>2. Что такое LCQ</h3><p><b>LCQ — Last Chance Qualifier</b>, или «заезд последнего шанса». Это отборочный заезд для пилотов, которые не получили прямой проход в Финал A. Старт LCQ всегда формируется по результатам квалификации.</p>
+<h3>3. Финальная система</h3><div class="rxRuleCards"><div class="rxRuleCard"><strong>1–6 участников</strong><span>Все пилоты проходят в Финал A. Проводятся три заезда: <b>A1, A2 и A3</b>. Во всех трёх заездах стартовый порядок одинаковый — по квалификации.</span></div><div class="rxRuleCard"><strong>7–10 участников</strong><span>Первые 4 пилота квалификации проходят напрямую. Остальные стартуют в одном LCQ. <b>Первые два на финише</b> получают позиции 5 и 6 Финала A.</span></div><div class="rxRuleCard"><strong>11–16 участников</strong><span>Первые 4 проходят напрямую. Остальные распределяются «змейкой» в LCQ B и LCQ C. Из каждого заезда проходит <b>только победитель</b>.</span></div><div class="rxRuleCard"><strong>17 и более участников</strong><span>Создаются предварительные LCQ максимум по 6 машин. Победители переходят выше. В заключительном LCQ два лучших получают последние места Финала A.</span></div></div>
+<h3>4. Как формируется решётка Финала A</h3><div class="rxGridOrder"><div><b>Позиции 1–4</b><span>Четыре лучших пилота квалификации. Они проходят напрямую.</span></div><div><b>Позиции 5–6 при одном LCQ</b><span>Победитель LCQ стартует пятым, второе место — шестым. Квалификация не может переставить их местами.</span></div><div><b>Позиции 5–6 при LCQ B/C</b><span>Оба пилота являются победителями разных заездов. Выше стартует тот, кто был выше в квалификации.</span></div></div>
+<div class="raceGuideVisual"><div class="guideVisualTitle">Финал A — стартовые позиции</div><div class="rxGridDiagram rxFinalGrid" role="img" aria-label="В финале шесть вертикальных машин стоят в три ряда; над каждой машиной отдельная П-образная скоба"><div class="rxDirection"><span>↑</span><b>НАПРАВЛЕНИЕ ДВИЖЕНИЯ</b></div><div class="rxTrack"><div class="rxFinalRows"><div class="rxFinalRow rowOne"><span class="rxCar pole"><i></i><b>1</b></span><span class="rxCar"><i></i><b>2</b></span></div><div class="rxFinalRow rowTwo"><span class="rxCar"><i></i><b>3</b></span><span class="rxCar"><i></i><b>4</b></span></div><div class="rxFinalRow rowThree"><span class="rxCar"><i></i><b>5</b></span><span class="rxCar"><i></i><b>6</b></span></div></div></div></div><p class="guideCaption">Эта схема является эталонной для приложения: каждый следующий ряд смещён вправо. Скоба всегда расположена отдельно над машиной, шире корпуса и не пересекает его.</p></div>
+<h3>5. Три заезда Финала A</h3><p>Финал A состоит из трёх заездов по <b>7 кругов</b>: A1, A2 и A3. Стартовая решётка во всех трёх заездах остаётся одинаковой.</p><p>За место начисляются штрафные очки: 1-е место — 1, 2-е — 2, далее по занятому месту. DNF, DNS и DSQ дают 7 очков. В итог входят <b>два лучших результата из трёх</b>. Побеждает пилот с наименьшей суммой.</p>
+<h3>6. Равенство очков в Финале A</h3><p>При равной сумме применяются последовательно:</p><div class="rxGridOrder"><div><b>1</b><span>Большее количество побед в A1–A3.</span></div><div><b>2</b><span>Большее количество вторых мест.</span></div><div><b>3</b><span>Лучший результат в A3.</span></div><div><b>4</b><span>Более высокое место в квалификации.</span></div></div>
+<div class="rxProgression" role="img" aria-label="Квалификация: первые четыре напрямую в Финал A, остальные через LCQ; затем три заезда A1 A2 A3"><div class="rxProgressFinal"><span>ГЛАВНЫЙ ФИНАЛ</span><b>A1 + A2 + A3</b><em>зачёт двух лучших результатов</em></div><div class="rxProgressLinks"><div class="rxProgressLink"><span class="rxAdvanceCount">↑ TOP 4</span><i></i></div><div class="rxProgressLink"><span class="rxAdvanceCount">↑ 2 МЕСТА</span><i></i></div></div><div class="rxProgressSemis"><div class="rxProgressBlock"><span>КВАЛИФИКАЦИЯ</span><b>TOP 4</b><em>прямой проход</em></div><div class="rxProgressBlock"><span>ОТБОР</span><b>LCQ</b><em>честный проход по финишу</em></div></div></div>
+<h3>7. Очки этапа</h3><p>По итоговому протоколу первые 10 пилотов получают очки: <b>25–18–15–12–10–8–6–4–2–1</b>.</p><div class="pointsGuide"><span><b>1</b>25</span><span><b>2</b>18</span><span><b>3</b>15</span><span><b>4</b>12</span><span><b>5</b>10</span><span><b>6</b>8</span><span><b>7</b>6</span><span><b>8</b>4</span><span><b>9</b>2</span><span><b>10</b>1</span></div></div>`,
+ terms:`<div class="guideContent"><h2>Обозначения</h2><dl class="termsList"><dt>LCQ</dt><dd>Last Chance Qualifier — заезд последнего шанса для прохода в Финал A.</dd><dt>DNS</dt><dd>Did Not Start — пилот не стартовал.</dd><dt>DNF</dt><dd>Did Not Finish — пилот стартовал, но не финишировал.</dd><dt>DSQ</dt><dd>Disqualified — дисквалификация.</dd><dt>Best 3</dt><dd>Три лучших результата пилота в квалификационных сериях.</dd></dl></div>`
+};
+const HELP_SECTIONS_EN={
+ manual:`<div class="guideContent"><h2>User guide</h2><h3>1. Creating a race</h3><p>Select the race type and enter its name, date and location.</p><h3>2. Drivers</h3><p>Add drivers. Registration order does not determine sporting results: starting positions are set by qualifying.</p><h3>3. Qualifying</h3><p>Create the rounds, enter the results and save every heat. The driver’s three best results — Best 3 — count toward the qualifying standings.</p><h3>4. Finals stage</h3><p>Tap “Generate finals”. The app automatically selects the format based on the number of drivers, creates the LCQ structure and the three Final A heats.</p><h3>5. Entering results</h3><p>Save the heats in order. After A3, the app automatically calculates the best two results out of three and generates the final report.</p><h3>6. Export</h3><p>“PDF / Print” creates a printable document, while “Download PNG” creates an image of the results.</p></div>`,
+ raceguide:`<div class="guideContent">
+<h2>Legion RX Championship sporting regulations</h2>
+<h3>1. Qualifying</h3><p>The qualifying system remains unchanged. Up to 6 cars take part in one heat; the distance is <b>5 laps</b>. There are 3–5 qualifying rounds, and the driver’s three best results count (<b>Best 3</b>).</p><p>The qualifying result determines seeding, direct advancement to Final A, LCQ line-ups and starting positions.</p>
+<div class="raceGuideVisual"><div class="guideVisualTitle">Qualifying — starting positions</div><div class="rxGridDiagram rxQualifyingGrid" role="img" aria-label="Six vertical cars stand in one row, each with its own separate U-shaped starting gate above it"><div class="rxDirection"><span>↑</span><b>DIRECTION OF TRAVEL</b></div><div class="rxTrack"><div class="rxQualifyingRow"><span class="rxCar pole"><i></i><b>1</b></span><span class="rxCar"><i></i><b>2</b></span><span class="rxCar"><i></i><b>3</b></span><span class="rxCar"><i></i><b>4</b></span><span class="rxCar"><i></i><b>5</b></span><span class="rxCar"><i></i><b>6</b></span></div></div></div><p class="guideCaption">A car is shown as a vertical rectangle. Each car has its own <b>separate</b> U-shaped starting gate above it. The gate is wider than the car and does not touch it, leaving a visible gap.</p></div>
+<h3>2. What is an LCQ?</h3><p><b>LCQ — Last Chance Qualifier</b> — is a qualifying heat for drivers who did not advance directly to Final A. The LCQ starting order is always based on qualifying results.</p>
+<h3>3. Finals system</h3><div class="rxRuleCards"><div class="rxRuleCard"><strong>1–6 drivers</strong><span>All drivers advance to Final A. Three heats are held: <b>A1, A2 and A3</b>. The starting order is identical in all three heats and follows qualifying.</span></div><div class="rxRuleCard"><strong>7–10 drivers</strong><span>The top 4 qualifiers advance directly. The remaining drivers race in one LCQ. The <b>top two finishers</b> take positions 5 and 6 in Final A.</span></div><div class="rxRuleCard"><strong>11–16 drivers</strong><span>The top 4 advance directly. The remaining drivers are distributed in a snake pattern between LCQ B and LCQ C. <b>Only the winner</b> of each heat advances.</span></div><div class="rxRuleCard"><strong>17 or more drivers</strong><span>Preliminary LCQs of no more than 6 cars are created. Winners advance to the next level. The top two in the final LCQ take the last two places in Final A.</span></div></div>
+<h3>4. How the Final A grid is formed</h3><div class="rxGridOrder"><div><b>Positions 1–4</b><span>The four best qualifiers advance directly.</span></div><div><b>Positions 5–6 with one LCQ</b><span>The LCQ winner starts fifth and second place starts sixth. Qualifying cannot reverse their order.</span></div><div><b>Positions 5–6 with LCQ B/C</b><span>Both drivers are winners of separate heats. The driver ranked higher in qualifying starts ahead.</span></div></div>
+<div class="raceGuideVisual"><div class="guideVisualTitle">Final A — starting positions</div><div class="rxGridDiagram rxFinalGrid" role="img" aria-label="Six vertical cars stand in three staggered rows, each with its own separate U-shaped starting gate"><div class="rxDirection"><span>↑</span><b>DIRECTION OF TRAVEL</b></div><div class="rxTrack"><div class="rxFinalRows"><div class="rxFinalRow rowOne"><span class="rxCar pole"><i></i><b>1</b></span><span class="rxCar"><i></i><b>2</b></span></div><div class="rxFinalRow rowTwo"><span class="rxCar"><i></i><b>3</b></span><span class="rxCar"><i></i><b>4</b></span></div><div class="rxFinalRow rowThree"><span class="rxCar"><i></i><b>5</b></span><span class="rxCar"><i></i><b>6</b></span></div></div></div></div><p class="guideCaption">This is the reference layout used by the app: each following row is shifted to the right. Every gate remains separate above the car, wider than the body and never overlaps it.</p></div>
+<h3>5. Three Final A heats</h3><p>Final A consists of three <b>7-lap</b> heats: A1, A2 and A3. The starting grid remains the same in all three heats.</p><p>Penalty points match the finishing position: 1st place scores 1 point, 2nd scores 2, and so on. DNF, DNS and DSQ score 7 points. The <b>best two results out of three</b> count. The driver with the lowest total wins.</p>
+<h3>6. Ties in Final A</h3><p>If totals are equal, the following criteria are applied in order:</p><div class="rxGridOrder"><div><b>1</b><span>More wins in A1–A3.</span></div><div><b>2</b><span>More second-place finishes.</span></div><div><b>3</b><span>Better result in A3.</span></div><div><b>4</b><span>Higher qualifying position.</span></div></div>
+<div class="rxProgression" role="img" aria-label="Qualifying: the top four advance directly to Final A, the others go through the LCQ, followed by A1, A2 and A3"><div class="rxProgressFinal"><span>MAIN FINAL</span><b>A1 + A2 + A3</b><em>best two results count</em></div><div class="rxProgressLinks"><div class="rxProgressLink"><span class="rxAdvanceCount">↑ TOP 4</span><i></i></div><div class="rxProgressLink"><span class="rxAdvanceCount">↑ 2 POSITIONS</span><i></i></div></div><div class="rxProgressSemis"><div class="rxProgressBlock"><span>QUALIFYING</span><b>TOP 4</b><em>direct advancement</em></div><div class="rxProgressBlock"><span>QUALIFIER</span><b>LCQ</b><em>advancement by finishing order</em></div></div></div>
+<h3>7. Event points</h3><p>The top 10 drivers in the final report score: <b>25–18–15–12–10–8–6–4–2–1</b>.</p><div class="pointsGuide"><span><b>1</b>25</span><span><b>2</b>18</span><span><b>3</b>15</span><span><b>4</b>12</span><span><b>5</b>10</span><span><b>6</b>8</span><span><b>7</b>6</span><span><b>8</b>4</span><span><b>9</b>2</span><span><b>10</b>1</span></div></div>`,
+ terms:`<div class="guideContent"><h2>Terms</h2><dl class="termsList"><dt>LCQ</dt><dd>Last Chance Qualifier — a last-chance heat for advancement to Final A.</dd><dt>DNS</dt><dd>Did Not Start — the driver did not start.</dd><dt>DNF</dt><dd>Did Not Finish — the driver started but did not finish.</dd><dt>DSQ</dt><dd>Disqualified — the driver was disqualified.</dd><dt>Best 3</dt><dd>The driver’s three best results from the qualifying rounds.</dd></dl></div>`
+};
+function currentHelpSections(){return window.LegionI18n?.getLanguage?.()==='en'?HELP_SECTIONS_EN:HELP_SECTIONS_RU}
+function renderHelp(key){const sections=currentHelpSections();document.querySelectorAll('.helpTab').forEach(b=>b.classList.toggle('active',b.dataset.help===key));$('helpContent').innerHTML=sections[key]||sections.manual}
 document.querySelectorAll('.helpTab').forEach(b=>b.addEventListener('click',()=>renderHelp(b.dataset.help)));
 initChampionships(); toggleChampionshipFields();

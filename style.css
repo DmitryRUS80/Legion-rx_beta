@@ -515,3 +515,136 @@ body.cropEditorOpen{overflow:hidden;touch-action:none}
   .finalGrid.startGrid .startGridPosition{right:-7px;bottom:-7px;width:25px;height:25px;font-size:12px}
   .finalGrid.startGrid .startGridName{max-width:68px;font-size:9.5px}
 }
+
+/* =========================================================
+   LEGION RX v3.3.6 BETA — DESIGN CONCEPT UI
+   Visual-only layer: no race logic or saved-data keys changed.
+========================================================= */
+:root{
+  --rx-bg:#06080b;
+  --rx-panel:#0d1116;
+  --rx-panel-2:#12171d;
+  --rx-line:#262d36;
+  --rx-line-soft:#1b2129;
+  --rx-text:#f5f7f9;
+  --rx-muted:#929ba7;
+  --rx-red:#f12f35;
+  --rx-red-dark:#7f151a;
+  --rx-green:#35d486;
+  --rx-shadow:0 18px 50px rgba(0,0,0,.42);
+}
+html{background:var(--rx-bg);scroll-behavior:smooth}
+body.rxConceptUI{
+  background:
+    radial-gradient(circle at 50% -120px,rgba(241,47,53,.12),transparent 340px),
+    linear-gradient(180deg,#07090c 0,#090c10 42%,#06080b 100%);
+  color:var(--rx-text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+.rxConceptUI .appShell{max-width:1120px;margin:0 auto;min-height:100vh;background:transparent}
+.rxConceptUI .appMain{max-width:980px;margin:0 auto;padding:18px 20px 132px}
+.rxConceptUI .topBar{
+  position:sticky;top:0;z-index:120;
+  grid-template-columns:48px 1fr auto 38px;
+  min-height:84px;padding:calc(10px + env(safe-area-inset-top)) 20px 10px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(6,8,11,.88);backdrop-filter:blur(22px) saturate(135%);
+  box-shadow:0 8px 30px rgba(0,0,0,.2)
+}
+.rxConceptUI .brandMark{font-style:italic;letter-spacing:-1px;line-height:.9}
+.rxConceptUI .brandMark span{font-size:23px;font-weight:950;color:#fff}
+.rxConceptUI .brandMark b{font-size:27px;font-weight:950;color:var(--rx-red)}
+.rxConceptUI .brandBlock small{margin-top:7px;color:#878f99;font-size:9px;letter-spacing:3px;text-transform:uppercase}
+.rxConceptUI .versionBadge{min-width:auto;padding:9px 12px;border-color:#333b46;background:#11151b;color:#d7dbe0;font-size:11px}
+.rxConceptUI .homeButton{width:46px;height:46px;border-color:#303843;background:#11151b;box-shadow:inset 0 1px rgba(255,255,255,.03)}
+.rxConceptUI .homeButton small{font-size:8px;letter-spacing:.2px}
+.rxDensityToggle{display:grid!important;place-content:center;gap:3px;width:36px!important;height:36px!important;margin:0!important;padding:8px!important;border:1px solid #303843!important;background:#11151b!important}
+.rxDensityToggle span{display:block;width:15px;height:1px;background:#aab1ba}.rxDensityToggle span:nth-child(2){width:10px}
+.rxLineIcon,.buttonSvg{display:grid;place-items:center}
+.rxLineIcon svg,.buttonSvg svg,.rxChevron svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.rxConceptUI .buttonSvg{flex:0 0 auto}.rxConceptUI .buttonSvg svg{width:18px;height:18px}
+.rxConceptUI button:has(.buttonSvg){display:flex;align-items:center;justify-content:center;gap:8px}
+
+.rxConceptUI .heroShowcase{
+  position:relative;min-height:210px;margin:0 0 20px;border-color:#272e37;border-radius:20px;
+  background:#080b0f;box-shadow:var(--rx-shadow)
+}
+.rxConceptUI .heroShowcase:after{content:"";position:absolute;inset:0 0 70px;background:linear-gradient(90deg,rgba(4,6,8,.92),rgba(4,6,8,.26) 60%,rgba(4,6,8,.68)),linear-gradient(0deg,#090c10,transparent 58%);pointer-events:none}
+.rxConceptUI .heroShowcase img{height:260px;max-height:none;object-position:center 58%;filter:saturate(.72) contrast(1.08) brightness(.7)}
+.rxConceptUI .heroShowcase:before{content:"LEGION RX\A RALLYCROSS MANAGER";white-space:pre;position:absolute;z-index:2;left:24px;top:28px;color:#fff;font-size:28px;font-weight:950;font-style:italic;line-height:1.05;letter-spacing:-1px;text-shadow:0 3px 18px #000}
+.rxConceptUI .heroShowcaseActions{position:absolute;z-index:3;left:20px;right:20px;bottom:16px;grid-template-columns:1.35fr 1fr 1fr;padding:0;border:0;background:transparent}
+.rxConceptUI .heroShowcaseActions button{min-height:46px;border:1px solid #343c47;background:rgba(13,17,22,.9);backdrop-filter:blur(12px)}
+.rxConceptUI .heroShowcaseActions .primaryAction{border-color:rgba(241,47,53,.7);background:linear-gradient(180deg,#f13a40,#c71f25);box-shadow:0 8px 25px rgba(241,47,53,.25)}
+
+.rxConceptUI .sectionHeading{margin:18px 2px 12px}.rxConceptUI .sectionHeading span,.rxConceptUI .cardLabel{color:var(--rx-red);font-size:10px;font-weight:900;letter-spacing:1.5px}
+.rxConceptUI .sectionHeading h2{font-size:22px;margin-top:4px}
+.rxConceptUI .menuGrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.rxConceptUI .menuCard{
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;
+  min-height:138px;padding:17px;border:1px solid var(--rx-line);border-radius:14px;
+  background:linear-gradient(145deg,#12171d,#0c1015);box-shadow:inset 0 1px rgba(255,255,255,.025),0 12px 25px rgba(0,0,0,.18);
+  text-align:left;overflow:hidden;transition:transform .2s ease,border-color .2s ease,background .2s ease
+}
+.rxConceptUI .menuCard:before{content:"";position:absolute;inset:auto -40px -60px auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(241,47,53,.11),transparent 68%)}
+.rxConceptUI .menuCard:hover{transform:translateY(-2px);border-color:#3c4653;background:linear-gradient(145deg,#151b22,#0e1217)}
+.rxConceptUI .menuCard.activeCard,.rxConceptUI .menuCard:first-child{border-color:rgba(241,47,53,.45)}
+.rxConceptUI .menuIcon{width:42px;height:42px;margin:0 0 18px;border:0;border-radius:10px;background:#181e25;color:#cfd4da}
+.rxConceptUI .menuCard.activeCard .menuIcon{background:rgba(241,47,53,.12);color:var(--rx-red)}
+.rxConceptUI .menuCard > span:nth-child(2){display:grid;gap:5px}.rxConceptUI .menuCard b{font-size:14px;text-transform:uppercase;letter-spacing:.2px}.rxConceptUI .menuCard small{color:#838d99;font-size:10px;line-height:1.35}
+.rxConceptUI .menuCard > i{position:absolute;right:12px;top:13px;color:#58616d}.rxConceptUI .rxChevron svg{width:16px;height:16px}
+
+.rxConceptUI .card,.rxConceptUI .currentRaceCard,.rxConceptUI .standingsPanel,.rxConceptUI .heatCard,.rxConceptUI .finalCard,.rxConceptUI .archiveCard,.rxConceptUI .settingsCard{
+  border-color:var(--rx-line);background:linear-gradient(180deg,var(--rx-panel-2),var(--rx-panel));box-shadow:0 14px 34px rgba(0,0,0,.22)
+}
+.rxConceptUI .card{border-radius:18px;padding:22px}.rxConceptUI .screenHero{margin-bottom:12px;padding:8px 2px 12px;border-bottom:1px solid var(--rx-line-soft)}
+.rxConceptUI .screenHero span{color:var(--rx-red);font-size:9px;letter-spacing:1.8px}.rxConceptUI .screenHero h1{font-size:28px;letter-spacing:-.6px}
+.rxConceptUI .ghostAction{border-color:#303842;background:#10151a;color:#b9c0c8}
+.rxConceptUI input,.rxConceptUI select,.rxConceptUI textarea{border-color:#303842;background:#0b0f14;color:#f1f3f5;box-shadow:inset 0 1px 4px rgba(0,0,0,.28)}
+.rxConceptUI input:focus,.rxConceptUI select:focus,.rxConceptUI textarea:focus{border-color:var(--rx-red);box-shadow:0 0 0 3px rgba(241,47,53,.12)}
+.rxConceptUI button{border-color:#343c46;background:#171c22;color:#f2f4f6;transition:transform .14s ease,filter .14s ease,border-color .14s ease}
+.rxConceptUI button:not(:disabled):active{transform:scale(.975)}
+.rxConceptUI button:not(.secondaryButton):not(.ghostAction):not(.navItem):not(.menuCard):not(.homeButton):not(.iconButton):not(.rxDensityToggle){background:linear-gradient(180deg,#ed373d,#bd1e24);border-color:#ef4449}
+.rxConceptUI .secondaryButton{background:#171c22}.rxConceptUI .dangerButton,.rxConceptUI .dangerSettings button{background:#231114!important;border-color:#6f252a!important;color:#ff7479!important}
+
+.rxConceptUI .bottomNav{position:fixed;z-index:130;left:50%;right:auto;bottom:10px;transform:translateX(-50%);width:min(94vw,720px);padding:7px;border:1px solid #2a313b;border-radius:18px;background:rgba(7,9,13,.94);backdrop-filter:blur(22px);box-shadow:0 22px 55px rgba(0,0,0,.55)}
+.rxConceptUI .navGroup{gap:4px}.rxConceptUI .navItem{min-height:58px;padding:7px 8px;border:0;border-radius:12px;background:transparent;color:#747e8a}
+.rxConceptUI .navItem > span{height:25px}.rxConceptUI .navItem svg{width:21px;height:21px}.rxConceptUI .navItem small{font-size:9px;font-weight:750}
+.rxConceptUI .navItem.active{background:linear-gradient(180deg,rgba(241,47,53,.18),rgba(241,47,53,.08));color:#fff;box-shadow:inset 0 0 0 1px rgba(241,47,53,.18)}
+.rxConceptUI .navItem.active svg{color:var(--rx-red)}
+
+.rxConceptUI .pilotPhotoPlaceholder,.rxConceptUI .pilotAvatar,.rxConceptUI .driverAvatar{border-radius:10px;border-color:#46505c;background:#11161c}
+.rxConceptUI .racePilotList,.rxConceptUI .pilotPickerList{display:grid;gap:7px}
+.rxConceptUI .racePilotRow,.rxConceptUI .pilotPickerRow,.rxConceptUI .pilotDatabaseCard{border-color:#252c35;background:#0c1015;border-radius:12px}
+.rxConceptUI .rankingTable,.rxConceptUI table{border-collapse:separate;border-spacing:0;overflow:hidden;border-radius:11px;background:#090c10}
+.rxConceptUI th{background:#12171d;color:#8f99a5}.rxConceptUI td{border-color:#242b34}
+.rxConceptUI .rankingTable tbody tr:hover{background:#11161c}
+.rxConceptUI .roundWinner,.rxConceptUI .bestTotal{color:var(--rx-red)!important}
+
+.rxConceptUI .settingsGrid{gap:8px}.rxConceptUI .settingsCard{grid-template-columns:42px 1fr auto;min-height:76px;padding:13px 15px;border-radius:12px}
+.rxConceptUI .settingsCard > span{width:38px;height:38px;border-radius:9px;background:#181e25;color:#aeb6c0}.rxConceptUI .settingsCard h3{font-size:14px}.rxConceptUI .settingsCard p{font-size:10px;color:#848e99}
+.rxConceptUI .archiveCard{padding:16px;border-radius:13px}.rxConceptUI .helpTabs{position:sticky;top:90px;z-index:40;padding:6px;border:1px solid #282f38;border-radius:12px;background:rgba(9,12,16,.92);backdrop-filter:blur(16px)}
+.rxConceptUI .helpTab{flex:1;margin:0;background:transparent}.rxConceptUI .helpTab.active{background:#d4262c}
+.rxConceptUI .guideContent h3{color:#ff5d62}.rxConceptUI .rxRuleCards,.rxConceptUI .rxGridOrder{scroll-snap-type:x mandatory}
+
+.rxScreenEnter{animation:rxScreenEnter .32s cubic-bezier(.2,.72,.25,1)}
+@keyframes rxScreenEnter{from{opacity:0;transform:translateX(18px) scale(.994)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.rxScreenEnter{animation:none}.rxConceptUI *{scroll-behavior:auto!important;transition:none!important}}
+
+body.rxCompact .card{padding:15px}body.rxCompact .heatCard,body.rxCompact .finalCard{padding:12px}body.rxCompact .formGrid{gap:8px}body.rxCompact .racePilotRow{min-height:auto;padding:8px}body.rxCompact .screenHero{margin-bottom:7px}body.rxCompact .sectionHint{margin-bottom:8px}
+
+@media(max-width:800px){
+  .rxConceptUI .appMain{padding:12px 14px 126px}
+  .rxConceptUI .topBar{grid-template-columns:46px 1fr auto 34px;padding-left:14px;padding-right:14px;min-height:78px}
+  .rxConceptUI .brandMark span{font-size:20px}.rxConceptUI .brandMark b{font-size:23px}.rxConceptUI .brandBlock small{font-size:8px;letter-spacing:2.2px}
+  .rxConceptUI .versionBadge{font-size:9px;padding:8px}.rxDensityToggle{width:32px!important;height:32px!important}
+  .rxConceptUI .heroShowcase{min-height:190px;border-radius:16px}.rxConceptUI .heroShowcase img{height:235px;aspect-ratio:auto}.rxConceptUI .heroShowcase:before{left:18px;top:22px;font-size:23px}.rxConceptUI .heroShowcaseActions{left:12px;right:12px;bottom:12px;grid-template-columns:1fr 1fr}.rxConceptUI .heroShowcaseActions .primaryAction{grid-column:1/-1}.rxConceptUI .heroShowcaseActions button{min-height:41px;padding:9px;font-size:12px}
+  .rxConceptUI .menuGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.rxConceptUI .menuCard{min-height:128px;padding:14px}.rxConceptUI .menuIcon{margin-bottom:15px}.rxConceptUI .menuCard small{font-size:9px}
+  .rxConceptUI .card{padding:16px;border-radius:15px}.rxConceptUI .screenHero h1{font-size:24px}
+  .rxConceptUI .bottomNav{bottom:6px;width:calc(100vw - 12px);border-radius:17px;padding-bottom:calc(7px + env(safe-area-inset-bottom))}.rxConceptUI .navItem{min-width:0;padding:6px 2px}.rxConceptUI .navItem small{font-size:8px}
+  .rxConceptUI .helpTabs{top:80px;flex-wrap:nowrap;overflow-x:auto}.rxConceptUI .helpTab{min-width:max-content}
+  .rxConceptUI .rxRuleCards,.rxConceptUI .rxGridOrder{display:flex!important;overflow-x:auto;gap:10px;padding-bottom:8px}.rxConceptUI .rxRuleCards>* ,.rxConceptUI .rxGridOrder>*{min-width:82%;scroll-snap-align:start}
+}
+@media(max-width:430px){
+  .rxConceptUI .versionBadge{max-width:70px;line-height:1.1}.rxConceptUI .brandBlock small{letter-spacing:1.5px}.rxConceptUI .heroShowcase:before{font-size:21px}
+  .rxConceptUI .menuCard{min-height:120px}.rxConceptUI .menuCard b{font-size:12px}.rxConceptUI .menuIcon{width:37px;height:37px}
+}
