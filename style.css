@@ -1157,3 +1157,7 @@ body.cropEditorOpen{overflow:hidden;touch-action:none}
 [data-theme="rx-light"] button.primaryAction{
   color:#fff!important;
 }
+
+
+/* v3.3.11 — contextual PWA installation help */
+.installHelpInner{display:flex;flex-direction:column;gap:8px}.installHelpInner b{color:#fff;font-size:16px}.installHelpInner span{color:inherit}.installHelpInner ol{margin:2px 0 4px 20px;padding:0}.installHelpInner li{margin:4px 0}.installNowButton{align-self:flex-start;margin-top:4px}.guideInstallDetected{margin:0 0 18px;padding:14px 16px;border:1px solid rgba(239,43,45,.4);border-radius:12px;background:#15191f;color:#d4d7dc}.guideInstallDetected .installHelpInner b{color:#fff}[data-theme="rx-light"] .guideInstallDetected{background:#f4f6f8;color:#303843;border-color:#cfd6df}[data-theme="rx-light"] .guideInstallDetected .installHelpInner b{color:#111820}

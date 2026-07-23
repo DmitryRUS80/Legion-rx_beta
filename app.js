@@ -1,4 +1,4 @@
-/* Legion RX Championship Edition v3.3.5 Beta */
+/* Legion RX Championship Edition v3.3.11 Beta */
 
 const $ = id => document.getElementById(id);
 const eventNameInput = $("eventName");
@@ -18,6 +18,18 @@ const racePilotList = $("racePilotList");
 const pilotCounter = $("pilotCounter");
 const nextButton = $("nextStep");
 const PILOT_DB_KEY = "legionRxPilotDatabase";
+const LAST_LOCATION_KEY = "legionRxLastEventLocation";
+const INSTALL_HINT_KEY = "legionRxInstallHintShown_v3.3.11";
+
+function saveLastEventLocation(value = eventLocationInput?.value || "") {
+    const locationValue = String(value).trim();
+    if (locationValue) localStorage.setItem(LAST_LOCATION_KEY, locationValue);
+}
+
+function getLastEventLocation() {
+    return localStorage.getItem(LAST_LOCATION_KEY) || "";
+}
+
 let pendingPilotPhoto = "";
 let editingPilotId = "";
 let pendingEditPilotPhoto = "";
@@ -32,12 +44,15 @@ function toggleChampionshipFields(){
     $("championshipStageFields")?.classList.toggle("hidden",!on);
 }
 eventStatusInput.addEventListener("change", toggleChampionshipFields);
+eventLocationInput?.addEventListener("change", () => saveLastEventLocation());
+eventLocationInput?.addEventListener("blur", () => saveLastEventLocation());
 
 function readRaceForm() {
     RaceData.eventName = eventNameInput.value.trim() || "Соревнование Legion RX";
     RaceData.clubName = clubNameInput.value.trim() || "Legion RC Penza";
     RaceData.eventDate = eventDateInput.value;
     RaceData.eventLocation = eventLocationInput.value.trim();
+    saveLastEventLocation(RaceData.eventLocation);
     RaceData.eventStatus = eventStatusInput.value;
     RaceData.championshipId = eventStatusInput.value === "championship" ? raceChampionshipInput.value : "";
     RaceData.championshipStageNumber = eventStatusInput.value === "championship" ? Number(raceStageNumberInput.value || 1) : null;
@@ -763,12 +778,65 @@ $("printProtocol").addEventListener("click", printProtocol);
 $("saveProtocolImage").addEventListener("click", exportProtocolPng);
 $("completeRace")?.addEventListener("click", completeCurrentRace);
 $("openHome").addEventListener("click", () => navigateTo("home"));
-$("showInstallInfo").addEventListener("click", () => {
-    const box = $("installHelp");
-    box.innerHTML = "На iPhone откройте сайт в Safari → Поделиться → На экран «Домой». После первого запуска приложение работает офлайн.";
-    box.classList.remove("hidden");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+let deferredInstallPrompt = null;
+window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
 });
+
+function detectInstallPlatform() {
+    const ua = navigator.userAgent || "";
+    const isStandalone = window.matchMedia?.("(display-mode: standalone)")?.matches || window.navigator.standalone === true;
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/i.test(ua);
+    const isWindows = /Windows/i.test(ua);
+    const isMac = /Macintosh|Mac OS X/i.test(ua);
+    return { isStandalone, isIOS, isAndroid, isWindows, isMac };
+}
+
+function getInstallHelpHtml() {
+    const lang = window.LegionI18n?.getLanguage?.() || "ru";
+    const p = detectInstallPlatform();
+    if (p.isStandalone) {
+        return lang === "en"
+            ? `<div class="installHelpInner"><b>Legion RX is already installed</b><span>The app launches from its icon and can work offline after the first complete load.</span></div>`
+            : `<div class="installHelpInner"><b>Legion RX уже установлено</b><span>Приложение запускается с иконки и после первой полной загрузки может работать офлайн.</span></div>`;
+    }
+    if (p.isIOS) {
+        return lang === "en"
+            ? `<div class="installHelpInner"><b>Install on iPhone or iPad</b><ol><li>Open Legion RX in Safari.</li><li>Tap Share.</li><li>Select “Add to Home Screen”.</li><li>Tap “Add”.</li></ol><span>Open the installed app once while online, then test it in Airplane Mode.</span></div>`
+            : `<div class="installHelpInner"><b>Установка на iPhone или iPad</b><ol><li>Откройте Legion RX в Safari.</li><li>Нажмите «Поделиться».</li><li>Выберите «На экран Домой».</li><li>Нажмите «Добавить».</li></ol><span>Один раз откройте установленное приложение с интернетом, затем проверьте его в авиарежиме.</span></div>`;
+    }
+    if (p.isAndroid) {
+        const button = deferredInstallPrompt
+            ? `<button type="button" id="installPwaNow" class="primaryAction installNowButton">${lang === "en" ? "Install Legion RX" : "Установить Legion RX"}</button>`
+            : "";
+        return lang === "en"
+            ? `<div class="installHelpInner"><b>Install on Android</b><ol><li>Open Legion RX in Google Chrome.</li><li>Tap the browser menu ⋮.</li><li>Select “Install app” or “Add to Home screen”.</li><li>Confirm installation.</li></ol>${button}<span>If the page opened inside Telegram or VK, first choose “Open in browser”.</span></div>`
+            : `<div class="installHelpInner"><b>Установка на Android</b><ol><li>Откройте Legion RX в Google Chrome.</li><li>Нажмите меню браузера ⋮.</li><li>Выберите «Установить приложение» или «Добавить на главный экран».</li><li>Подтвердите установку.</li></ol>${button}<span>Если ссылка открылась внутри Telegram или VK, сначала выберите «Открыть в браузере».</span></div>`;
+    }
+    const desktopName = p.isWindows ? "Windows" : (p.isMac ? "macOS" : "computer");
+    return lang === "en"
+        ? `<div class="installHelpInner"><b>Install on ${desktopName}</b><ol><li>Open Legion RX in Chrome or Edge.</li><li>Click the install icon in the address bar or open the browser menu.</li><li>Select “Install Legion RX”.</li></ol><span>The installed app opens in a separate window and can work offline after the first complete load.</span></div>`
+        : `<div class="installHelpInner"><b>Установка на ${desktopName}</b><ol><li>Откройте Legion RX в Chrome или Edge.</li><li>Нажмите значок установки в адресной строке или откройте меню браузера.</li><li>Выберите «Установить Legion RX».</li></ol><span>Приложение будет открываться в отдельном окне и после первой полной загрузки сможет работать офлайн.</span></div>`;
+}
+
+function showInstallInstructions({ auto = false } = {}) {
+    const box = $("installHelp");
+    if (!box) return;
+    box.innerHTML = getInstallHelpHtml();
+    box.classList.remove("hidden");
+    box.querySelector("#installPwaNow")?.addEventListener("click", async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        box.innerHTML = getInstallHelpHtml();
+    });
+    if (!auto) window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+$("showInstallInfo").addEventListener("click", () => showInstallInstructions());
 bindRouteButtons();
 $("languageSelect").value = window.LegionI18n?.getLanguage?.() || "ru";
 $("languageSelect").addEventListener("change", e => window.LegionI18n?.setLanguage?.(e.target.value));
@@ -786,7 +854,9 @@ if (loadFromBrowser()) {
     qualifyingSelect.value = String(RaceData.qualifyingCount || 4);
 } else {
     eventDateInput.value = new Date().toISOString().slice(0,10);
+    eventLocationInput.value = getLastEventLocation();
 }
+if (eventLocationInput.value.trim()) saveLastEventLocation(eventLocationInput.value);
 
 upsertLegacyRacePilotsIntoDatabase();
 drawPilots();
@@ -795,6 +865,13 @@ updatePhotoPreview();
 restoreRaceView();
 updateHomeSummary();
 navigateTo("home");
+setTimeout(() => {
+    const platform = detectInstallPlatform();
+    if (!platform.isStandalone && !localStorage.getItem(INSTALL_HINT_KEY)) {
+        showInstallInstructions({ auto: true });
+        localStorage.setItem(INSTALL_HINT_KEY, "1");
+    }
+}, 700);
 
 
 const HELP_SECTIONS_RU={
@@ -813,7 +890,8 @@ const HELP_SECTIONS_RU={
 <h3>6. Равенство очков в Финале A</h3><p>При равной сумме применяются последовательно:</p><div class="rxGridOrder"><div><b>1</b><span>Большее количество побед в A1–A3.</span></div><div><b>2</b><span>Большее количество вторых мест.</span></div><div><b>3</b><span>Лучший результат в A3.</span></div><div><b>4</b><span>Более высокое место в квалификации.</span></div></div>
 <div class="rxProgression" role="img" aria-label="Квалификация: первые четыре напрямую в Финал A, остальные через LCQ; затем три заезда A1 A2 A3"><div class="rxProgressFinal"><span>ГЛАВНЫЙ ФИНАЛ</span><b>A1 + A2 + A3</b><em>зачёт двух лучших результатов</em></div><div class="rxProgressLinks"><div class="rxProgressLink"><span class="rxAdvanceCount">↑ TOP 4</span><i></i></div><div class="rxProgressLink"><span class="rxAdvanceCount">↑ 2 МЕСТА</span><i></i></div></div><div class="rxProgressSemis"><div class="rxProgressBlock"><span>КВАЛИФИКАЦИЯ</span><b>TOP 4</b><em>прямой проход</em></div><div class="rxProgressBlock"><span>ОТБОР</span><b>LCQ</b><em>честный проход по финишу</em></div></div></div>
 <h3>7. Очки этапа</h3><p>По итоговому протоколу первые 10 пилотов получают очки: <b>25–18–15–12–10–8–6–4–2–1</b>.</p><div class="pointsGuide"><span><b>1</b>25</span><span><b>2</b>18</span><span><b>3</b>15</span><span><b>4</b>12</span><span><b>5</b>10</span><span><b>6</b>8</span><span><b>7</b>6</span><span><b>8</b>4</span><span><b>9</b>2</span><span><b>10</b>1</span></div></div>`,
- terms:`<div class="guideContent"><h2>Обозначения</h2><dl class="termsList"><dt>LCQ</dt><dd>Last Chance Qualifier — заезд последнего шанса для прохода в Финал A.</dd><dt>DNS</dt><dd>Did Not Start — пилот не стартовал.</dd><dt>DNF</dt><dd>Did Not Finish — пилот стартовал, но не финишировал.</dd><dt>DSQ</dt><dd>Disqualified — дисквалификация.</dd><dt>Best 3</dt><dd>Три лучших результата пилота в квалификационных сериях.</dd></dl></div>`
+ terms:`<div class="guideContent"><h2>Обозначения</h2><dl class="termsList"><dt>LCQ</dt><dd>Last Chance Qualifier — заезд последнего шанса для прохода в Финал A.</dd><dt>DNS</dt><dd>Did Not Start — пилот не стартовал.</dd><dt>DNF</dt><dd>Did Not Finish — пилот стартовал, но не финишировал.</dd><dt>DSQ</dt><dd>Disqualified — дисквалификация.</dd><dt>Best 3</dt><dd>Три лучших результата пилота в квалификационных сериях.</dd></dl></div>`,
+ install:`<div class="guideContent"><h2>Установка приложения</h2><div id="guideInstallDetected" class="guideInstallDetected"></div><h3>iPhone и iPad</h3><ol><li>Откройте Legion RX в Safari.</li><li>Нажмите «Поделиться».</li><li>Выберите «На экран Домой».</li><li>Нажмите «Добавить».</li></ol><h3>Android</h3><ol><li>Откройте Legion RX в Google Chrome.</li><li>Нажмите меню ⋮.</li><li>Выберите «Установить приложение» или «Добавить на главный экран».</li><li>Подтвердите установку.</li></ol><h3>Компьютер</h3><p>В Chrome или Edge нажмите значок установки в адресной строке и выберите «Установить Legion RX».</p><p><b>Проверка офлайн:</b> после первой полной загрузки закройте приложение, включите авиарежим и снова откройте его с иконки.</p></div>`
 };
 const HELP_SECTIONS_EN={
  manual:`<div class="guideContent"><h2>User guide</h2><h3>1. Creating a race</h3><p>Select the race type and enter its name, date and location.</p><h3>2. Drivers</h3><p>Add drivers. Registration order does not determine sporting results: starting positions are set by qualifying.</p><h3>3. Qualifying</h3><p>Create the rounds, enter the results and save every heat. The driver’s three best results — Best 3 — count toward the qualifying standings.</p><h3>4. Finals stage</h3><p>Tap “Generate finals”. The app automatically selects the format based on the number of drivers, creates the LCQ structure and the three Final A heats.</p><h3>5. Entering results</h3><p>Save the heats in order. After A3, the app automatically calculates the best two results out of three and generates the final report.</p><h3>6. Export</h3><p>“PDF / Print” creates a printable document, while “Download PNG” creates an image of the results.</p></div>`,
@@ -829,9 +907,25 @@ const HELP_SECTIONS_EN={
 <h3>6. Ties in Final A</h3><p>If totals are equal, the following criteria are applied in order:</p><div class="rxGridOrder"><div><b>1</b><span>More wins in A1–A3.</span></div><div><b>2</b><span>More second-place finishes.</span></div><div><b>3</b><span>Better result in A3.</span></div><div><b>4</b><span>Higher qualifying position.</span></div></div>
 <div class="rxProgression" role="img" aria-label="Qualifying: the top four advance directly to Final A, the others go through the LCQ, followed by A1, A2 and A3"><div class="rxProgressFinal"><span>MAIN FINAL</span><b>A1 + A2 + A3</b><em>best two results count</em></div><div class="rxProgressLinks"><div class="rxProgressLink"><span class="rxAdvanceCount">↑ TOP 4</span><i></i></div><div class="rxProgressLink"><span class="rxAdvanceCount">↑ 2 POSITIONS</span><i></i></div></div><div class="rxProgressSemis"><div class="rxProgressBlock"><span>QUALIFYING</span><b>TOP 4</b><em>direct advancement</em></div><div class="rxProgressBlock"><span>QUALIFIER</span><b>LCQ</b><em>advancement by finishing order</em></div></div></div>
 <h3>7. Event points</h3><p>The top 10 drivers in the final report score: <b>25–18–15–12–10–8–6–4–2–1</b>.</p><div class="pointsGuide"><span><b>1</b>25</span><span><b>2</b>18</span><span><b>3</b>15</span><span><b>4</b>12</span><span><b>5</b>10</span><span><b>6</b>8</span><span><b>7</b>6</span><span><b>8</b>4</span><span><b>9</b>2</span><span><b>10</b>1</span></div></div>`,
- terms:`<div class="guideContent"><h2>Terms</h2><dl class="termsList"><dt>LCQ</dt><dd>Last Chance Qualifier — a last-chance heat for advancement to Final A.</dd><dt>DNS</dt><dd>Did Not Start — the driver did not start.</dd><dt>DNF</dt><dd>Did Not Finish — the driver started but did not finish.</dd><dt>DSQ</dt><dd>Disqualified — the driver was disqualified.</dd><dt>Best 3</dt><dd>The driver’s three best results from the qualifying rounds.</dd></dl></div>`
+ terms:`<div class="guideContent"><h2>Terms</h2><dl class="termsList"><dt>LCQ</dt><dd>Last Chance Qualifier — a last-chance heat for advancement to Final A.</dd><dt>DNS</dt><dd>Did Not Start — the driver did not start.</dd><dt>DNF</dt><dd>Did Not Finish — the driver started but did not finish.</dd><dt>DSQ</dt><dd>Disqualified — the driver was disqualified.</dd><dt>Best 3</dt><dd>The driver’s three best results from the qualifying rounds.</dd></dl></div>`,
+ install:`<div class="guideContent"><h2>Installing the application</h2><div id="guideInstallDetected" class="guideInstallDetected"></div><h3>iPhone and iPad</h3><ol><li>Open Legion RX in Safari.</li><li>Tap Share.</li><li>Select “Add to Home Screen”.</li><li>Tap “Add”.</li></ol><h3>Android</h3><ol><li>Open Legion RX in Google Chrome.</li><li>Tap the ⋮ menu.</li><li>Select “Install app” or “Add to Home screen”.</li><li>Confirm installation.</li></ol><h3>Computer</h3><p>In Chrome or Edge, click the install icon in the address bar and choose “Install Legion RX”.</p><p><b>Offline test:</b> after the first complete load, close the app, enable Airplane Mode and open it again from its icon.</p></div>`
 };
 function currentHelpSections(){return window.LegionI18n?.getLanguage?.()==='en'?HELP_SECTIONS_EN:HELP_SECTIONS_RU}
-function renderHelp(key){const sections=currentHelpSections();document.querySelectorAll('.helpTab').forEach(b=>b.classList.toggle('active',b.dataset.help===key));$('helpContent').innerHTML=sections[key]||sections.manual}
+function renderHelp(key){
+    const sections=currentHelpSections();
+    document.querySelectorAll('.helpTab').forEach(b=>b.classList.toggle('active',b.dataset.help===key));
+    $('helpContent').innerHTML=sections[key]||sections.manual;
+    if(key==='install'){
+        const target=$('guideInstallDetected');
+        if(target) target.innerHTML=getInstallHelpHtml();
+        target?.querySelector('#installPwaNow')?.addEventListener('click',async()=>{
+            if(!deferredInstallPrompt)return;
+            deferredInstallPrompt.prompt();
+            await deferredInstallPrompt.userChoice;
+            deferredInstallPrompt=null;
+            target.innerHTML=getInstallHelpHtml();
+        });
+    }
+}
 document.querySelectorAll('.helpTab').forEach(b=>b.addEventListener('click',()=>renderHelp(b.dataset.help)));
 initChampionships(); toggleChampionshipFields();
